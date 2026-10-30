@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>🔥 Jogo Quente</title>
+<style>
+:root{--bg:#12060a;--card:#24101a;--red:#e0245e;--pink:#ff6b9d;--gold:#ffc46b;--txt:#fbeef3;--mut:#b88a9c}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 50% 0,#3a0d1f,var(--bg) 70%) fixed;color:var(--txt);min-height:100vh;display:flex;justify-content:center}
+main{width:100%;max-width:480px;padding:20px 16px 40px}
+h1{font-size:2.2rem;text-align:center;margin:10px 0 4px}
+h2{font-size:1.3rem;margin:18px 0 10px;color:var(--pink)}
+p.sub{text-align:center;color:var(--mut);margin-bottom:18px}
+.hide{display:none!important}
+button{font:inherit;border:0;border-radius:14px;padding:14px;cursor:pointer;color:var(--txt);background:#3a1a28;transition:.15s}
+button:active{transform:scale(.97)}
+.btn{width:100%;margin:6px 0;font-weight:600;font-size:1.05rem}
+.main-btn{background:linear-gradient(135deg,var(--red),#ff4f7b);box-shadow:0 6px 20px #e0245e55}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.opt.sel{background:var(--red);box-shadow:0 0 0 2px var(--pink)}
+input{width:100%;padding:13px;border-radius:12px;border:1px solid #4a2333;background:#1c0b12;color:var(--txt);font:inherit;margin:4px 0}
+.card{background:var(--card);border:1px solid #4a2333;border-radius:20px;padding:22px;margin:14px 0;box-shadow:0 10px 30px #0008;animation:pop .3s}
+@keyframes pop{from{transform:scale(.92);opacity:0}}
+.tag{display:inline-block;font-size:.75rem;padding:3px 10px;border-radius:20px;background:#4a2333;color:var(--gold);margin-bottom:10px}
+.big{font-size:1.35rem;line-height:1.45;font-weight:600}
+.turn{text-align:center;color:var(--gold);font-weight:700;font-size:1.1rem;margin-top:8px}
+.menu button{display:flex;align-items:center;gap:14px;text-align:left;width:100%;margin:8px 0;padding:16px;background:var(--card);border:1px solid #4a2333}
+.menu .ic{width:64px;flex:0 0 64px;display:flex}.menu .ic svg{width:100%}
+.banner{display:flex;justify-content:center;margin:6px 0}.banner svg{height:90px;max-width:100%}
+.dimg{width:100%;background:#1c0b12;border-radius:14px;margin-top:12px;padding:6px}.menu small{display:block;color:var(--mut);font-weight:400}
+.top{display:flex;justify-content:space-between;align-items:center}
+.top button{padding:8px 14px;font-size:.9rem}
+.score{display:flex;justify-content:space-around;color:var(--mut);font-size:.9rem;margin-top:10px}
+.timer{font-size:2.4rem;text-align:center;font-weight:800;color:var(--gold);margin:8px 0}
+.dice{display:flex;gap:8px;margin:12px 0}
+.dice div{flex:1;background:#3a1a28;border-radius:14px;padding:16px 6px;text-align:center;font-weight:700;font-size:1.05rem;min-height:70px;display:flex;align-items:center;justify-content:center}
+.stars{color:var(--gold)}
+.pimg{width:100%;background:#1c0b12;border-radius:14px;margin:10px 0 4px;padding:6px}
+.legend{font-size:.8rem;color:var(--mut);text-align:center}
+.note{color:var(--mut);font-size:.9rem;margin-top:10px;line-height:1.4}
+.safe{background:#1c0b12;border:1px dashed var(--pink);border-radius:14px;padding:12px;font-size:.9rem;color:var(--mut);margin:12px 0}
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin:10px 0}
+.sq{background:#2a1220;border-radius:8px;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.1rem;position:relative}
+.sq small{font-size:.55rem;color:var(--mut)}.sq .pw{position:absolute;bottom:1px;font-size:.8rem}
+.sq.hot{box-shadow:0 0 0 2px var(--gold)}
+.bomb{font-size:5rem;text-align:center;animation:pulse .6s infinite alternate}@keyframes pulse{to{transform:scale(1.15)}}
+.coupon{border:2px dashed var(--gold);border-radius:16px;padding:18px;text-align:center;background:#2a1220;margin:10px 0}
+.coupon b{color:var(--gold);font-size:1.3rem;display:block;margin:6px 0}
+.mrow{display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #3a1a28}
+.mpb{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);gap:2px;aspect-ratio:1;margin:8px 0}
+.mc{background:#2a1220;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.95rem;position:relative;overflow:hidden;border:2px solid transparent;line-height:1}
+.mc i{font-style:normal;font-size:.42rem;color:var(--mut);text-align:center;margin-top:1px}
+.mc .bar{position:absolute;top:0;left:0;right:0;height:5px}
+.mc .tk{position:absolute;bottom:0;font-size:.6rem}.mc .st{position:absolute;top:5px;right:1px;font-size:.45rem;color:var(--gold)}
+.mc.now{box-shadow:0 0 0 2px #fff inset}
+.mcen{grid-row:2/8;grid-column:2/8;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:6px}
+.mcen .cash{display:flex;gap:10px;font-weight:700}.mcen .dd{font-size:2rem}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+</style>
+</head>
+<body>
+<main>
+
+<!-- 18+ -->
+<section id="s-age">
+  <h1>🔥 Jogo Quente</h1>
+  <p class="sub">Jogo adulto para casais</p>
+  <div class="card">
+    <p class="big">Conteúdo sexual explícito. Só para maiores de 18 anos.</p>
+    <p class="note">Tudo aqui é só sugestão. Qualquer um pode recusar qualquer carta, a qualquer momento, sem precisar explicar.</p>
+  </div>
+  <button class="btn main-btn" onclick="go('s-setup')">Tenho +18, bora 😈</button>
+</section>
+
+<!-- SETUP -->
+<section id="s-setup" class="hide">
+  <h1>Quem tá jogando?</h1>
+  <h2>Casal</h2>
+  <div class="row">
+    <button class="opt sel" data-c="mf" onclick="setCombo(this)">👨‍❤️‍👩<br>Ele & Ela</button>
+    <button class="opt" data-c="mm" onclick="setCombo(this)">👨‍❤️‍👨<br>Ele & Ele</button>
+    <button class="opt" data-c="ff" onclick="setCombo(this)">👩‍❤️‍👩<br>Ela & Ela</button>
+  </div>
+  <h2>Nomes</h2>
+  <input id="n1" placeholder="Jogador 1" maxlength="16">
+  <input id="n2" placeholder="Jogador 2" maxlength="16">
+  <h2>Intensidade</h2>
+  <div class="row">
+    <button class="opt sel" data-l="1" onclick="setLvl(this)">🌶️<br>Quente</button>
+    <button class="opt" data-l="2" onclick="setLvl(this)">🌶️🌶️<br>Pegando fogo</button>
+    <button class="opt" data-l="3" onclick="setLvl(this)">🔥🔥🔥<br>Sem limites</button>
+  </div>
+  <div class="safe">🛑 Combinem uma <b>palavra de segurança</b> antes de começar. Falou, parou — sem discussão.</div>
+  <button class="btn main-btn" onclick="start()">Começar</button>
+</section>
+
+<!-- MENU -->
+<section id="s-menu" class="hide">
+  <div class="top"><button onclick="go('s-setup')">⚙️ Ajustes</button><span id="lvlTag" class="tag"></span></div>
+  <h1>Escolha o jogo</h1>
+  <div class="menu">
+    <button onclick="openMode('vd')"><span class="ic" data-art="vd"></span><span>Verdade ou Desafio<small>Perguntas e desafios picantes</small></span></button>
+    <button onclick="openMode('bb')"><span class="ic" data-art="bb"></span><span>Faz ou Bebe<small>Cumpre o desafio ou toma um gole</small></span></button>
+    <button onclick="openMode('ks')"><span class="ic" data-art="ks"></span><span>Roleta Kama Sutra<small>Posição sorteada + tempo + regra extra</small></span></button>
+    <button onclick="openMode('dd')"><span class="ic" data-art="dd"></span><span>Dados Eróticos<small>Ação × parte do corpo × tempo</small></span></button>
+    <button onclick="openMode('en')"><span class="ic" data-art="en"></span><span>Eu Nunca (+18)<small>Quem já fez, bebe</small></span></button>
+    <button onclick="openMode('dm')"><span class="ic" data-art="dm"></span><span>Mestre & Escrav(a)<small>Um manda, o outro obedece</small></span></button>
+    <button onclick="openMode('rp')"><span class="ic" data-art="rp"></span><span>Roleplay Safado<small>Cenário, personagens e regra secreta</small></span></button>
+    <button onclick="openMode('st')"><span class="ic" data-art="st"></span><span>Strip Roleta<small>Gira e alguém fica com menos roupa</small></span></button>
+    <button onclick="openMode('ed')"><span class="ic" data-art="ed"></span><span>Quem Goza Primeiro Perde<small>Rodadas cada vez mais quentes</small></span></button>
+    <button onclick="openMode('mp')"><span class="ic" data-art="mp"></span><span>Motelpólio<small>Banco Imobiliário safado: compra, cobra aluguel em bebida ou sacanagem</small></span></button>
+    <button onclick="openMode('tb')"><span class="ic" data-art="tb"></span><span>Tabuleiro do Prazer<small>Dado, casas surpresa e chegada com prêmio</small></span></button>
+    <button onclick="openMode('mt')"><span class="ic" data-art="mt"></span><span>Match de Fantasias<small>Cada um vota em segredo — só aparece o que os dois querem</small></span></button>
+    <button onclick="openMode('bo')"><span class="ic" data-art="bo"></span><span>Bomba Safada<small>Passa o celular… quem estiver com ele quando explodir, paga</small></span></button>
+    <button onclick="openMode('cp')"><span class="ic" data-art="cp"></span><span>Vales Safados<small>Sorteie vales e guarde pra usar quando quiser</small></span></button>
+    <button onclick="openMode('lt')"><span class="ic" data-art="lt"></span><span>Catálogo de Posições<small>Todas as posições do seu casal</small></span></button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section id="s-game" class="hide">
+  <div class="top"><button onclick="go('s-menu')">← Menu</button><span id="gTitle" class="tag"></span></div>
+  <div class="banner" id="banner"></div><div id="game"></div>
+  <div class="score" id="score"></div>
+</section>
+
+</main>
+<script>
+/* ================= CONTEÚDO =================
+   Cartas: [nível, texto, segundos?, gênero de quem faz?, gênero de quem recebe?]
+   {A}=quem faz  {B}=o outro  {Ao}/{Bo}= "o" ou "a" conforme o gênero  */
+
+const TRUTHS = [
+[1,'Qual foi a primeira coisa que te atraiu em {B}?'],
+[1,'Qual parte do corpo de {B} você mais gosta?'],
+[1,'Qual o lugar mais inusitado onde você já transou?'],
+[1,'Que roupa (ou lingerie/cueca) você quer ver {B} usando?'],
+[1,'Já teve sonho erótico com {B}? Conta como foi.'],
+[1,'O que {B} faz sem perceber que te deixa com tesão?'],
+[1,'Qual foi o nosso melhor beijo?'],
+[1,'Qual foi a primeira vez que você pensou em transar com {B}?'],
+[2,'Qual fantasia você ainda não contou para {B}?'],
+[2,'Qual sua posição favorita e por quê?'],
+[2,'Quando foi a última vez que se masturbou pensando em {B}?'],
+[2,'O que {B} faz na cama que te deixa louc{Ao}?'],
+[2,'Você prefere mandar ou obedecer na cama?'],
+[2,'Que som de {B} mais te excita?'],
+[2,'Toparia transar em um lugar público? Qual?'],
+[2,'Qual parte do seu corpo é mais sensível e pouco explorada?'],
+[2,'Qual foi a mensagem mais safada que você já quis mandar e não mandou?'],
+[3,'Qual a fantasia mais suja que você já teve?'],
+[3,'Tem algo que você nunca pediu por vergonha? Pede agora.'],
+[3,'Ménage: toparia? Como seria?'],
+[3,'Descreva em detalhes a melhor transa que já teve com {B}.'],
+[3,'Algema, venda, tapas ou brinquedo: qual quer testar primeiro?'],
+[3,'O que você quer que {B} faça com você antes de dormir hoje?'],
+[3,'Já fingiu orgasmo? Com quem?'],
+[3,'Qual palavra suja você mais gosta de ouvir na hora?'],
+[3,'Gravar um vídeo nosso: toparia? Por quê?'],
+[2,'Anal: o que te dá curiosidade e o que te dá medo?',null,'f'],
+[3,'Em qual posição você mais quer dar o cu pra mim?',null,'f'],
+[3,'Qual palavrão você quer ouvir na hora? Fala alto.'],
+[3,'Onde você mais gosta que eu goze?'],
+[3,'Qual foi a coisa mais suja que já pensou em fazer comigo e travou?'],
+[3,'Qual foi a vez que você ficou com mais tesão em mim? O que eu fiz?'],
+[3,'Você se acha mais putinha/safado do que eu imagino? Prova.'],
+];
+
+const DARES = [
+[1,'{A}, beije o pescoço de {B} bem devagar.',30],
+[1,'{A}, faça uma massagem nos ombros de {B} só com a ponta dos dedos.',60],
+[1,'{A}, sussurre no ouvido de {B} o que quer fazer com {B} hoje.'],
+[1,'{A}, tire uma peça de roupa de {B} usando só a boca.'],
+[1,'{A}, dance sensualmente para {B}.',60],
+[1,'{A}, beije {B} em 3 lugares que ainda não beijou hoje.'],
+[1,'{A}, vende os olhos de {B} e beije um lugar surpresa.'],
+[1,'{A}, morda de leve o lábio de {B} e puxe devagar.'],
+[1,'{A}, tire uma peça da sua roupa do jeito mais provocante possível.'],
+[1,'{A}, passe um cubo de gelo pelo corpo de {B} (onde {B} deixar).',30],
+[1,'{A}, olhe nos olhos de {B}, a um palmo de distância, sem beijar e sem rir.',60],
+[1,'{A}, beije {B} como se fosse a última vez.',30],
+[1,'{A}, deixe {B} escolher onde você vai beijar.'],
+[2,'{A}, tire toda a roupa de {B}, peça por peça, beijando cada parte que aparecer.'],
+[2,'{A}, lamba de {B} do umbigo até o pescoço.'],
+[2,'{A}, faça um striptease completo para {B}.',120],
+[2,'{A}, chupe os mamilos de {B}.',30],
+[2,'{A}, toque {B} por cima da roupa íntima, sem tirar.',60],
+[2,'{A}, amarre as mãos de {B} com um lenço/gravata até a próxima rodada.'],
+[2,'{A}, dê 3 tapas na bunda de {B} — {B} escolhe a força.'],
+[2,'{A}, beije a parte interna das coxas de {B} sem chegar lá.',45],
+[2,'{A}, se masturbe na frente de {B}. {B} só pode olhar.',60],
+[2,'{A}, pegue a mão de {B} e mostre exatamente como gosta de ser tocad{Ao}.'],
+[2,'{A}, fique só de roupa íntima (ou pelad{Ao}) até o fim do jogo.'],
+[2,'{A}, escreva uma palavra com a língua no corpo de {B}. {B} tem que adivinhar.'],
+[2,'{A}, sente no colo de {B} e rebole.',30],
+[2,'{A}, mande agora uma foto ousada para {B} — e {B} só pode ver amanhã.'],
+[2,'{A}, beije {B} enquanto passa a mão por todo o corpo de {B}.',60],
+[3,'{A}, faça sexo oral em {B}.',60],
+[3,'{A}, faça sexo oral em {B} até {B} pedir para parar.'],
+[3,'{A}, masturbe {B}. {B} não pode encostar em você.',120],
+[3,'{A}, leve {B} quase até o orgasmo e pare. Proibido terminar.'],
+[3,'69 agora!',120],
+[3,'{A}, dê prazer para {B} só com a boca, sem usar as mãos.',90],
+[3,'{A}, vende os olhos de {B}, segure as mãos de {B} e faça o que quiser.',180],
+[3,'{A}, você é escrav{Ao} de {B}: obedece tudo (dentro dos limites combinados).',300],
+[3,'{A}, use um brinquedo em {B}.',120],
+[3,'{A}, fale sacanagem no ouvido de {B} enquanto toca {B}.',90],
+[3,'{A}, fica paradinh{Ao}: {B} faz o que quiser com você.',120],
+[3,'{A}, dê ordens em voz alta do que {B} deve fazer com você.',120],
+[3,'Rapidinha em outro cômodo da casa. Valendo!',180],
+[3,'{A}, lamba chantilly/chocolate do corpo de {B}, de onde {B} escolher.'],
+[3,'{A}, cavalgue {B} sem deixar {B} se mexer.',120],
+[3,'{A}, escolha uma posição do Kama Sutra e fiquem nela.',180],
+[3,'{A}, faça {B} gozar do jeito que {B} pedir.'],
+[3,'{A}, beijo grego em {B} (só se os dois toparem).',60],
+[3,'{A}, faça um boquete bem lento em {B}, olhando nos olhos.',90,null,'m'],
+[3,'{A}, chupe {B} fazendo círculos lentos com a língua no clitóris.',90,null,'f'],
+[3,'{A}, use dois dedos em {B} enquanto beija o pescoço.',90,null,'f'],
+[3,'{A}, masturbe {B} usando os seios.',60,'f','m'],
+[3,'{A}, sente no rosto de {B}.',60],
+// 🍑 anal — índice 5 = 1 marca carta anal (sai MUITO mais quando quem recebe é ela)
+[2,'{A}, lamba e chupe a bunda de {B} inteirinha.',60,null,'f',1],
+[2,'{A}, passe óleo na bunda de {B} e vá descendo um dedo até o cuzinho, só provocando.',90,null,'f',1],
+[2,'{A}, fale no ouvido de {B} como vai comer o cuzinho dela mais tarde.',null,null,'f',1],
+[2,'{A}, abra a bunda de {B} com as mãos e fique só olhando e soprando.',30,null,'f',1],
+[3,'{A}, enfie um dedo no cuzinho de {B} enquanto chupa a buceta dela.',90,null,'f',1],
+[3,'{A}, dedo no cuzinho de {B} enquanto beija a boca dela.',60,null,'f',1],
+[3,'{A}, coloque um plug anal em {B}. Ela fica com ele até o fim do jogo.',null,null,'f',1],
+[3,'{A}, brinquedo no cuzinho de {B} enquanto masturba ela.',120,null,'f',1],
+[3,'{A}, beijo grego em {B} até ela gemer alto.',90,null,'f',1],
+[3,'{A}, coma o cu de {B} de quatro: muito lubrificante, começa devagar.',180,'m','f',1],
+[3,'{A}, anal de conchinha em {B}: devagar, ela controla o ritmo.',180,'m','f',1],
+[3,'{A}, {B} senta no seu pau pelo cuzinho e controla tudo.',180,'m','f',1],
+[3,'{A}, faça {B} implorar pra levar no cu antes de começar.',null,'m','f',1],
+[3,'{A}, anal em {B} enquanto ela usa vibrador no clitóris.',180,'m','f',1],
+[3,'{A}, goze dentro do cuzinho de {B} (se ela topar).',null,'m','f',1],
+[3,'{A}, anal em {B} deitada de bruços, você por cima segurando os pulsos dela.',180,'m','f',1],
+[3,'{A}, alterne: 1 minuto na buceta, 1 minuto no cu de {B}.',120,'m','f',1],
+[3,'{A}, use o strap-on no cuzinho de {B}, bem devagar.',180,'f','f',1],
+[3,'{A}, anal em {B}: lubrificante e sem pressa.',180,'m','m',1],
+// sujos
+[3,'{A}, garganta profunda em {B}: o mais fundo que aguentar, {B} segura seu cabelo e dita o ritmo.',60,null,'m'],
+[3,'{A}, goze onde {B} escolher: boca, peito, cara, barriga ou bunda.',null,'m'],
+[3,'{A}, fique de quatro, abra a bunda e implore pra {B} te comer.'],
+[3,'{A}, sente na cara de {B} e rebole até gozar.',null,'f'],
+[3,'{A}, se masturbe olhando nos olhos de {B} até gozar.'],
+[3,'{A}, chupe {B} com gelo na boca.',60],
+[3,'{A}, transem de frente pro espelho. Proibido desviar o olhar.',180],
+[3,'{A}, tapas na bunda de {B} durante o sexo até ficar vermelha.',120],
+[3,'{A}, puxe o cabelo de {B} e conte no ouvido, com palavrão, tudo o que vai fazer.',60],
+[3,'{A}, cuspa na boca de {B} e beije em seguida (se os dois toparem).'],
+[3,'{A}, xingue {B} de tudo que {B} gosta enquanto mete.',60],
+[3,'{A}, filmem 30 segundos de sexo no celular de {B} (apaguem depois se quiserem).',30],
+[3,'{A}, faça {B} gozar duas vezes seguidas.'],
+[3,'{A}, {B} é seu brinquedo sexual: use como quiser (dentro dos limites).',300],
+[3,'{A}, sexo na varanda, na cozinha ou no carro: escolham agora.',180],
+[3,'{A}, segure as mãos de {B} acima da cabeça e meta. {B} não pode soltar.',120],
+[3,'{A}, chupe {B} enquanto {B} fala sacanagem sem parar.',90],
+[3,'{A}, lamba {B} todinh{Bo}, da boca até lá embaixo, sem pular nada.',90],
+[3,'{A}, meta em {B} com força enquanto aperta a bunda.',120,'m'],
+[3,'{A}, chupe as bolas de {B} enquanto masturba ele.',90,null,'m'],
+[3,'{A}, goze na boca de {B} (se {B} topar).',null,'m'],
+[3,'{A}, faça {B} gozar só com a língua.',null,null,'f'],
+[3,'{A}, cavalgue {B} de costas e olhe pra trás enquanto rebola.',120,'f'],
+[3,'{A}, esfregue a buceta na coxa de {B} até gozar.',null,'f'],
+[3,'{A}, fique de joelhos com a boca aberta esperando {B}.',null,null,'m'],
+];
+
+const NEVER = [
+[1,'Eu nunca mandei nude.'],[1,'Eu nunca transei no carro.'],[1,'Eu nunca fiquei excitad@ em lugar público.'],
+[1,'Eu nunca fiz sexo no banho.'],[1,'Eu nunca stalkeei um ex depois de começar a namorar.'],
+[1,'Eu nunca tive um sonho erótico com alguém famoso.'],[1,'Eu nunca dei uma desculpa pra sair mais cedo e ir transar.'],
+[2,'Eu nunca transei em lugar onde alguém podia ver.'],[2,'Eu nunca usei algema ou venda.'],[2,'Eu nunca gravei áudio safado.'],
+[2,'Eu nunca me masturbei no trabalho/faculdade.'],[2,'Eu nunca transei mais de 3 vezes no mesmo dia.'],
+[2,'Eu nunca usei brinquedo erótico.'],[2,'Eu nunca fiz sexting em horário de trabalho.'],[2,'Eu nunca transei na casa dos pais.'],
+[3,'Eu nunca fingi orgasmo.'],[3,'Eu nunca fiz anal.'],[3,'Eu nunca gravei vídeo transando.'],[3,'Eu nunca fantasiei com ménage.'],
+[3,'Eu nunca gozei só com sexo oral.'],[3,'Eu nunca transei em lugar público de verdade.'],[3,'Eu nunca fui pego(a) no flagra.'],
+[3,'Eu nunca dei/recebi tapa na cara durante o sexo.'],[3,'Eu nunca assisti pornô junto com alguém.'],
+];
+
+// Posições — c: combos; d: dificuldade 1-3; np: não precisa de penetração
+const POS = [
+{n:'Papai e Mamãe (Missionário)',d:1,c:'mf mm ff',t:'Quem recebe deita de costas com as pernas abertas; quem penetra vem por cima, de frente. Clássico, muito beijo e olho no olho. Variação: pernas de quem recebe em volta da cintura.'},
+{n:'Amazona (Cavalgada)',d:1,c:'mf mm ff',t:'Um deita de costas e o outro senta por cima, de frente, controlando ritmo e profundidade. Quem está embaixo fica com as mãos livres para explorar.'},
+{n:'Cavalgada Invertida',d:2,c:'mf mm ff',t:'Igual à amazona, mas de costas para o rosto do parceiro. Vista privilegiada da bunda; quem está por cima pode se inclinar pra frente.'},
+{n:'Cachorrinho (De Quatro)',d:1,c:'mf mm ff',t:'Quem recebe fica de quatro; quem penetra fica de joelhos atrás, segurando o quadril. Penetração profunda — combinem a intensidade.'},
+{n:'Conchinha',d:1,c:'mf mm ff',t:'Os dois deitados de lado, um atrás do outro. Íntima e preguiçosa, com mãos livres para tocar seios, peito e genitais pela frente.'},
+{n:'Lótus (Padmasana)',d:2,c:'mf mm ff',t:'Posição do Kama Sutra: um senta de pernas cruzadas e o outro senta no colo, de frente, envolvendo a cintura com as pernas. Movimento lento, peito com peito, muito beijo.'},
+{n:'Borboleta',d:2,c:'mf mm ff',t:'Quem recebe deita na beira da cama com o quadril na borda e as pernas nos ombros de quem está em pé. Ótimo ângulo e controle.'},
+{n:'Bigorna (Pernas pro Alto)',d:2,c:'mf mm ff',t:'Quem recebe deita de costas e leva as pernas até os ombros/peito; quem penetra vem por cima, de joelhos. Bem profundo.'},
+{n:'Bocejo (Vijrimbhitaka)',d:2,c:'mf mm ff',t:'Do Kama Sutra: quem recebe deita de costas e abre as pernas bem altas e afastadas, em “V”; quem penetra segura os tornozelos.'},
+{n:'Em Pé contra a Parede',d:2,c:'mf mm ff',t:'Quem recebe encosta na parede (de frente ou de costas); quem penetra vem colado. De frente: uma perna levantada no quadril do outro.'},
+{n:'Carrinho de Mão',d:3,c:'mf mm ff',t:'Quem recebe apoia as mãos no chão; quem penetra segura as pernas dele(a) na altura do quadril. Exige força — façam perto da cama.'},
+{n:'Bailarina',d:3,c:'mf mm ff',t:'Os dois em pé, de frente. Quem recebe levanta uma perna bem alto, apoiada no ombro ou braço do outro. Equilíbrio e flexibilidade.'},
+{n:'Cadeira',d:1,c:'mf mm ff',t:'Quem penetra senta numa cadeira sem braços; o outro senta no colo, de frente ou de costas, com os pés no chão para controlar o movimento.'},
+{n:'Sereia (Bancada)',d:2,c:'mf mm ff',t:'Quem recebe deita de costas na mesa/bancada com o quadril na borda; quem penetra fica em pé entre as pernas. Mãos livres para estimular.'},
+{n:'Ponte',d:3,c:'mf mm ff',t:'Quem recebe faz uma ponte (quadril elevado, apoiado nas mãos e pés ou com travesseiros); quem penetra ajoelha entre as pernas. Use almofadas para facilitar.'},
+{n:'Elefante (De Bruços)',d:1,c:'mf mm ff',t:'Quem recebe deita de bruços com um travesseiro sob o quadril; quem penetra deita por cima. Muito contato de pele, ótima para sussurrar no ouvido.'},
+{n:'Aranha',d:2,c:'mf mm ff',t:'Os dois sentados de frente, inclinados para trás e apoiados nas mãos, pernas entrelaçadas. Movimento lento de vai-e-vem com o quadril.'},
+{n:'Arado',d:3,c:'mf mm ff',t:'Quem recebe deita de bruços na beira da cama com o tronco apoiado; quem penetra fica em pé atrás, segurando as pernas no ar como um arado.'},
+{n:'Trono',d:2,c:'mf mm ff',t:'Quem penetra senta na beira da cama; o outro senta no colo de costas, pés no chão. Mãos de quem está atrás livres para tocar tudo pela frente.'},
+{n:'Prece (Ajoelhados)',d:2,c:'mf mm ff',t:'Os dois de joelhos, um atrás do outro, colados. Quem está atrás abraça, beija a nuca e toca a frente do parceiro.'},
+{n:'Preguiça (Cachorrinho Deitado)',d:1,c:'mf mm ff',t:'Variação do de quatro com quem recebe deitado de bruços, quadril levemente elevado. Profundo e confortável.'},
+{n:'69',d:1,c:'mf mm ff',np:1,t:'Oral simultâneo: um deita de costas e o outro fica por cima, invertido. Variação: os dois deitados de lado.'},
+{n:'Tesoura',d:2,c:'ff mf mm',np:1,t:'Pernas entrelaçadas como tesoura, genitais se roçando. Movimento de quadril dos dois. Clássica entre duas mulheres.'},
+{n:'Trono do Rei/Rainha (Sentar no Rosto)',d:2,c:'mf mm ff',np:1,t:'Um deita de costas e o outro se ajoelha sobre o rosto, controlando a pressão. Quem está embaixo usa só a boca.'},
+{n:'Ajoelhad{o}',d:1,c:'mf mm ff',np:1,t:'Um fica em pé e o outro de joelhos na frente, fazendo oral. Troquem de lugar depois.'},
+{n:'Masturbação Mútua Frente a Frente',d:1,c:'mf mm ff',np:1,t:'Sentados ou deitados de frente, cada um masturba o outro ao mesmo tempo, olho no olho. Proibido fechar os olhos.'},
+{n:'Frotting (Corpo a Corpo)',d:1,c:'mm mf ff',np:1,t:'Deitados de frente, corpos colados, roçando os genitais um no outro sem penetração. Use lubrificante.'},
+];
+/* Ilustrações das posições (bonecos estilizados), na mesma ordem de POS.
+   [cenário, rosa=quem recebe, dourado=quem penetra/conduz]
+   cada boneco: cabeça, ombro, quadril, joelho1, pé1, joelho2, pé2, cotovelo1, mão1, cotovelo2, mão2 (x,y) */
+const BED=(x,w,y)=>`<rect x="${x}" y="${y}" width="${w}" height="${110-y}" rx="4" fill="#3a1a28"/>`;
+const IMG = [
+['', '22,100 35,103 75,103 92,82 112,96 95,84 116,99 40,90 58,84 30,95 20,90', '40,84 52,88 88,96 110,106 135,108 112,107 137,109 45,100 35,104 55,100 60,104'],
+['', '25,100 38,103 80,103 105,103 130,104 105,104 130,105 50,95 70,85 45,98 60,90', '74,50 75,62 80,96 60,100 85,104 58,101 83,106 68,80 60,95 70,82 62,96'],
+['', '25,100 38,103 80,103 105,103 130,104 105,104 130,105 50,95 70,85 45,98 60,90', '86,50 85,62 80,96 102,100 78,106 104,101 80,107 92,78 100,92 94,80 103,94'],
+['', '30,72 45,78 90,78 92,108 120,108 95,108 123,108 45,93 45,108 48,93 48,108', '110,36 108,48 100,80 115,106 145,108 118,106 148,108 100,62 92,76 103,64 95,78'],
+['', '30,90 45,95 85,95 100,85 120,100 102,88 122,103 55,90 70,88 50,92 65,92', '32,78 47,83 88,86 104,78 125,92 106,80 127,94 60,84 72,92 40,90 35,96'],
+['', '109,52 108,64 105,98 85,92 78,105 125,92 120,108 95,62 88,52 120,60 112,52', '100,58 100,70 100,105 75,104 108,108 125,104 92,108 85,80 108,75 115,80 92,75'],
+[BED(0,100,92), '25,82 38,85 95,85 115,62 125,45 117,64 127,47 30,92 45,95 32,93 47,96', '128,28 125,40 115,72 122,92 124,110 126,92 130,110 120,55 112,68 124,57 116,70'],
+['', '30,100 42,103 85,103 70,80 55,70 72,82 57,72 50,95 60,90 52,96 62,92', '60,62 72,70 98,92 115,108 140,108 117,108 142,108 65,85 55,102 68,87 58,103'],
+['', '25,100 38,103 80,103 95,80 108,58 100,85 122,68 45,92 52,98 47,93 55,99', '105,44 104,56 100,90 108,108 135,108 110,108 137,108 106,68 108,58 112,70 120,66'],
+['<line x1="60" y1="10" x2="60" y2="110" stroke="#3a1a28" stroke-width="6"/>', '68,26 68,38 70,70 70,90 70,110 90,70 100,82 80,40 92,32 82,44 95,36', '95,28 95,40 88,72 102,90 105,110 100,90 110,110 82,58 75,68 84,60 78,72'],
+['', '35,82 45,85 90,68 110,66 130,72 110,68 130,74 42,98 40,110 47,98 45,110', '110,26 108,38 100,70 105,90 105,110 112,90 115,110 100,55 92,66 104,57 96,68'],
+['', '85,26 85,38 87,70 86,90 85,110 100,52 112,36 95,42 105,36 92,46 102,40', '113,28 113,40 100,72 117,90 120,110 122,90 125,110 104,55 95,66 108,40 112,36'],
+['<path d="M108 80h30M112 80v30M136 80v30M138 80v-35" stroke="#3a1a28" stroke-width="5" fill="none"/>', '104,28 104,40 102,72 85,82 85,108 82,84 80,108 112,40 120,36 115,44 124,40', '122,33 122,45 120,78 100,80 100,108 98,82 96,108 108,62 98,68 110,64 100,70'],
+[BED(10,90,78), '25,68 38,72 95,72 110,55 120,38 113,58 125,42 45,78 55,78 50,80 62,79', '124,30 122,42 112,74 120,92 120,110 126,92 128,110 115,58 104,68 118,60 108,72'],
+['', '30,104 45,100 75,80 100,88 110,110 102,90 115,110 40,108 55,108 42,108 58,108', '110,43 108,55 100,88 120,108 145,108 122,108 147,108 98,70 85,80 102,72 90,82'],
+['', '25,100 40,103 80,100 105,103 130,104 105,105 130,106 30,108 20,108 32,108 22,108', '35,88 48,91 85,92 108,97 135,100 110,98 137,101 45,103 35,104 50,104 40,106'],
+['', '52,65 60,75 85,100 100,85 120,100 102,88 122,104 55,90 50,108 58,90 54,108', '148,65 140,75 115,100 100,82 80,98 98,86 78,102 145,90 150,108 142,90 146,108'],
+[BED(0,100,88), '25,78 38,82 95,82 115,78 135,72 115,80 135,76 30,88 20,86 32,88 22,87', '122,32 120,44 112,76 116,94 118,110 122,94 126,110 125,58 132,72 128,60 136,76'],
+[BED(0,112,86), '124,32 122,44 118,76 140,82 142,110 138,84 138,110 130,62 135,76 128,64 132,78', '103,38 104,50 108,82 128,84 130,110 125,86 126,110 112,62 122,70 110,66 120,74'],
+['', '109,40 108,52 105,85 110,108 85,108 112,108 87,108 118,65 128,62 116,68 126,66', '95,38 95,50 92,84 95,108 70,108 97,108 72,108 105,62 115,72 103,64 112,58'],
+['', '25,102 40,104 85,95 100,108 125,108 102,108 127,108 30,108 22,100 35,108 28,102', '40,88 52,90 92,86 112,100 138,104 114,101 140,105 48,100 40,104 54,100 46,104'],
+['', '25,100 38,103 80,103 95,92 110,103 97,94 112,105 50,95 60,90 52,96 62,92', '92,90 80,90 40,90 28,106 10,108 30,107 12,108 95,98 100,104 88,98 85,104'],
+['', '20,95 35,98 80,95 100,88 125,80 102,100 128,105 30,105 25,108 40,105 35,108', '180,95 165,98 120,95 100,92 75,85 98,102 72,106 170,105 175,108 160,105 165,108'],
+['', '130,102 115,104 75,104 55,104 30,105 55,105 30,106 120,94 128,85 112,94 118,88', '128,43 128,55 130,88 116,106 138,109 142,106 158,108 120,70 112,82 136,70 140,82'],
+['', '106,56 98,66 92,92 82,108 62,108 85,108 65,108 108,78 118,72 106,80 116,76', '122,16 122,28 122,60 124,85 125,110 128,85 130,110 116,40 110,52 128,42 130,55'],
+['', '78,54 80,66 85,100 100,88 112,104 98,92 108,106 88,82 100,96 72,85 70,104', '122,54 120,66 115,100 100,86 88,104 102,90 92,106 112,82 92,98 128,85 130,104'],
+['', '25,100 38,103 80,103 105,103 130,104 105,104 130,105 45,92 60,86 40,95 55,90', '30,88 43,91 85,92 108,95 133,98 110,96 135,99 38,100 28,103 50,101 40,104'],
+];
+function stick(str,col){
+  const p=str.split(' ').map(s=>s.split(',').map(Number));
+  const L=(a,b)=>`<line x1="${p[a][0]}" y1="${p[a][1]}" x2="${p[b][0]}" y2="${p[b][1]}"/>`;
+  return `<g stroke="${col}" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">${L(1,2)+L(2,3)+L(3,4)+L(2,5)+L(5,6)+L(1,7)+L(7,8)+L(1,9)+L(9,10)+L(0,1)}</g><circle cx="${p[0][0]}" cy="${p[0][1]}" r="8" fill="${col}"/>`;
+}
+function posSVG(p){
+  const im=IMG[POS.indexOf(p)];if(!im)return '';
+  return `<svg viewBox="0 0 200 118" class="pimg"><line x1="0" y1="112" x2="200" y2="112" stroke="#4a2333" stroke-width="2"/>${im[0]}${stick(im[1],'#ff6b9d')}${stick(im[2],'#ffc46b')}</svg>`;
+}
+const TIPS = {
+ mf:'Ele penetra, ela recebe (ou invertam com strap-on, se toparem).',
+ mm:'Escolham quem penetra. Lubrificante à base de água/silicone e preliminares sem pressa.',
+ ff:'Quem penetra usa strap-on, dildo ou dedos. Sem brinquedo? Troquem por esfregação ou oral.'
+};
+const MODS = [
+[1,'Devagar, no câmera lenta.'],[1,'Beijando o tempo todo.'],[1,'Sem tirar os olhos um do outro.'],[1,'Luz apagada, só o tato.'],
+[2,'Quem recebe dita o ritmo em voz alta.'],[2,'Com olhos vendados.'],[2,'Proibido gozar até o tempo acabar.'],[2,'Com um espelho na frente.'],
+[3,'Mãos amarradas de quem recebe.'],[3,'Falando sacanagem o tempo todo.'],[3,'Com um brinquedo ao mesmo tempo.'],[3,'Puxando o cabelo (com carinho).'],[3,'Intensidade máxima, sem parar.'],[3,'Falando palavrão a cada estocada.'],[3,'Com a mão no pescoço (de leve, sem apertar).'],[3,'Quem recebe implora por mais o tempo todo.'],
+];
+const ANAL_MODS=['🍑 Versão anal pra ela: muito lubrificante, começa devagar e ela dita o ritmo.','🍑 No cu dela, com vibrador no clitóris ao mesmo tempo.','🍑 Comece na buceta e termine no cu (se ela topar).','🍑 Ela de plug anal a posição inteira.'];
+const ACTS = [[1,'💋 Beijar'],[1,'💨 Soprar'],[1,'👐 Massagear'],[1,'✋ Acariciar'],[1,'🦷 Morder de leve'],[2,'👅 Lamber'],[2,'😮 Chupar'],[2,'🧊 Gelo em'],[3,'🔥 Fazer oral'],[3,'🤚 Dar um tapa em'],[3,'☝️ Enfiar um dedo em'],[3,'👅 Chupar com força']];
+const PARTS = [[1,'Pescoço'],[1,'Orelha'],[1,'Lábios'],[1,'Nuca'],[1,'Barriga'],[1,'Costas'],[2,'Mamilos'],[2,'Coxa interna'],[2,'Bunda'],[2,'Virilha'],[3,'Genitais'],[3,'Onde {B} escolher']];
+const TIMES = ['15 s','30 s','45 s','1 min','2 min'];
+const TSEC = [15,30,45,60,120];
+
+
+/* ================= ILUSTRAÇÕES DOS MODOS ================= */
+const G='#ffc46b',R='#e0245e',PK='#ff6b9d',W='#fbeef3';
+const glass=(x,rot,c)=>`<g transform="rotate(${rot} ${x} 45)"><path d="M${x-12} 14h24q0 26-12 29q-12-3-12-29z" fill="${c}" stroke="${W}" stroke-width="2"/><path d="M${x-12} 14h24v6h-24z" fill="#12060a" opacity=".5"/><line x1="${x}" y1="43" x2="${x}" y2="62" stroke="${W}" stroke-width="3"/><line x1="${x-9}" y1="64" x2="${x+9}" y2="64" stroke="${W}" stroke-width="3" stroke-linecap="round"/></g>`;
+const die=(x,y,rot,c,pips)=>`<g transform="rotate(${rot} ${x+17} ${y+17})"><rect x="${x}" y="${y}" width="34" height="34" rx="7" fill="${c}"/>${pips.map(([a,b])=>`<circle cx="${x+a}" cy="${y+b}" r="3.6" fill="#12060a"/>`).join('')}</g>`;
+const ART={
+ vd:`<svg viewBox="0 0 120 80"><text x="10" y="30" font-size="26" font-weight="900" fill="${G}">?</text><text x="100" y="30" font-size="26" font-weight="900" fill="${PK}">!</text><path d="M18 44Q34 24 60 36Q86 24 102 44Q60 76 18 44Z" fill="${R}"/><path d="M18 44Q60 52 102 44" stroke="#12060a" stroke-width="3" fill="none"/><path d="M40 36q8-4 14 0" stroke="${W}" stroke-width="2" fill="none" opacity=".6"/></svg>`,
+ bb:`<svg viewBox="0 0 120 80">${glass(46,-16,R)}${glass(74,16,'#9b1b47')}<text x="52" y="12" font-size="14" fill="${G}">✦</text></svg>`,
+ ks:`<svg viewBox="0 0 200 118">${stick(IMG[1][1],PK)}${stick(IMG[1][2],G)}<text x="150" y="40" font-size="30" fill="${R}">♥</text></svg>`,
+ dd:`<svg viewBox="0 0 120 80">${die(18,22,-14,PK,[[9,9],[17,17],[25,25]])}${die(66,20,12,G,[[9,9],[25,9],[9,25],[25,25],[17,17]])}</svg>`,
+ en:`<svg viewBox="0 0 120 80"><path d="M22 14h30l-5 52h-20z" fill="${R}" stroke="${W}" stroke-width="2"/><path d="M23 26h28" stroke="${W}" stroke-width="2" opacity=".5"/><text x="60" y="36" font-size="14" font-weight="800" fill="${G}">EU</text><text x="60" y="54" font-size="14" font-weight="800" fill="${PK}">NUNCA</text></svg>`,
+ dm:`<svg viewBox="0 0 120 80"><path d="M30 34l8-18 10 12 12-16 12 16 10-12 8 18z" fill="${G}"/><rect x="30" y="34" width="60" height="8" rx="2" fill="${G}"/><circle cx="46" cy="62" r="10" fill="none" stroke="${PK}" stroke-width="5"/><circle cx="74" cy="62" r="10" fill="none" stroke="${PK}" stroke-width="5"/><line x1="56" y1="62" x2="64" y2="62" stroke="${W}" stroke-width="3"/></svg>`,
+ rp:`<svg viewBox="0 0 120 80"><path d="M14 22q22-10 44 0q-2 30-22 36q-20-6-22-36z" fill="${R}"/><path d="M26 32q4-4 8 0M40 32q4-4 8 0M28 44q8 6 16 0" stroke="#12060a" stroke-width="3" fill="none"/><path d="M62 26q22-10 44 0q-2 30-22 36q-20-6-22-36z" fill="${G}"/><path d="M74 36q4 4 8 0M88 36q4 4 8 0" stroke="#12060a" stroke-width="3" fill="none"/><ellipse cx="84" cy="50" rx="5" ry="4" fill="#12060a"/></svg>`,
+ st:`<svg viewBox="0 0 120 80"><path d="M32 22h56l-6 18q-12 22-22 28q-10-6-22-28z" fill="${R}"/><path d="M32 22q-10 2-14-6M88 22q10 2 14-6" stroke="${PK}" stroke-width="3" fill="none"/><path d="M46 30q14 10 28 0" stroke="${G}" stroke-width="2" fill="none"/><text x="52" y="16" font-size="14" fill="${G}">✦</text></svg>`,
+ ed:`<svg viewBox="0 0 120 80"><path d="M60 6q20 22 14 36q10-4 10-14q12 18 2 34q-10 14-26 14q-16 0-26-14q-10-16 4-32q0 10 8 12q-6-18 14-36z" fill="${R}"/><path d="M60 40q10 10 6 20q-2 8-6 8q-4 0-6-8q-4-10 6-20z" fill="${G}"/></svg>`,
+ tb:`<svg viewBox="0 0 120 80"><rect x="20" y="10" width="60" height="60" rx="6" fill="#3a1a28"/>${[0,1,2,3].map(i=>[0,1,2,3].map(j=>`<rect x="${23+i*14.5}" y="${13+j*14.5}" width="12" height="12" rx="2" fill="${(i+j)%2?R:'#9b1b47'}"/>`).join('')).join('')}${die(78,36,14,G,[[9,9],[25,25],[17,17]])}</svg>`,
+ mt:`<svg viewBox="0 0 120 80"><path d="M42 66C10 44 14 18 32 18c8 0 12 6 12 6s4-6 12-6c4 0 7 1 9 4" fill="${PK}"/><path d="M78 66C110 44 106 18 88 18c-8 0-12 6-12 6s-4-6-12-6c-4 0-7 1-9 4" fill="${G}"/><path d="M60 28l-8 14h10l-6 16" stroke="${W}" stroke-width="3" fill="none"/></svg>`,
+ bo:`<svg viewBox="0 0 120 80"><circle cx="56" cy="48" r="24" fill="#2a1220" stroke="${R}" stroke-width="4"/><rect x="62" y="18" width="12" height="10" rx="2" fill="${R}" transform="rotate(30 68 23)"/><path d="M74 16q8-10 16-4" stroke="${W}" stroke-width="2" fill="none"/><text x="86" y="16" font-size="16" fill="${G}">✸</text><text x="44" y="56" font-size="20">🍑</text></svg>`,
+ cp:`<svg viewBox="0 0 120 80"><rect x="14" y="18" width="92" height="44" rx="8" fill="#2a1220" stroke="${G}" stroke-width="3" stroke-dasharray="6 4"/><text x="60" y="38" text-anchor="middle" font-size="11" font-weight="800" fill="${G}">VALE UM</text><text x="60" y="54" text-anchor="middle" font-size="14" fill="${PK}">♥ ♥ ♥</text></svg>`,
+ mp:`<svg viewBox="0 0 120 80"><rect x="22" y="8" width="64" height="64" rx="4" fill="#3a1a28"/><rect x="34" y="20" width="40" height="40" fill="#12060a"/>${[0,1,2,3,4].map(i=>`<rect x="${23+i*12.6}" y="9" width="11" height="10" fill="${['#e0245e','#ff8a3d','#ffc46b','#9b5de5','#3aa0ff'][i]}"/>`).join('')}<text x="54" y="46" text-anchor="middle" font-size="16">🏩</text><rect x="84" y="40" width="30" height="20" rx="3" fill="${G}"/><text x="99" y="54" text-anchor="middle" font-size="11" font-weight="900" fill="#12060a">🔥500</text></svg>`,
+ lt:`<svg viewBox="0 0 120 80"><path d="M60 20Q40 10 16 16v48q24-6 44 4z" fill="${R}"/><path d="M60 20Q80 10 104 16v48q-24-6-44 4z" fill="#9b1b47"/><path d="M60 20v48" stroke="${W}" stroke-width="2"/><text x="28" y="48" font-size="18" fill="${G}">♥</text><text x="76" y="48" font-size="18" fill="${PK}">♥</text></svg>`,
+};
+// desafios que citam uma posição mostram o desenho dela
+const DARE_POS=[[/^69/,'69'],[/cavalgue/i,'Amazona'],[/sente no rosto/i,'Trono do Rei'],[/sente no colo/i,'Cadeira'],[/Kama Sutra/i,'*'],[/boquete|sexo oral|chupe \{B\}/i,'Ajoelhad'],[/Rapidinha/i,'Em Pé']];
+function dareImg(t){
+  const m=DARE_POS.find(([re])=>re.test(t));if(!m)return '';
+  const p=m[1]==='*'?rnd(posList()):POS.find(x=>x.n.startsWith(m[1]));
+  return p?posSVG(p).replace('class="pimg"','class="dimg"'):'';
+}
+
+/* ================= ESTADO ================= */
+let S = JSON.parse(localStorage.getItem('jq')||'null') || {combo:'mf',lvl:1,n1:'',n2:''};
+let turn=0, mode=null, used={}, score=[0,0], drinks=[0,0], timerId=null;
+const $=id=>document.getElementById(id);
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const lvlName=['','🌶️ Quente','🌶️🌶️ Pegando fogo','🔥 Sem limites'];
+
+function go(id){document.querySelectorAll('section').forEach(s=>s.classList.add('hide'));$(id).classList.remove('hide');stopTimer();scrollTo(0,0)}
+function setCombo(b){document.querySelectorAll('[data-c]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');S.combo=b.dataset.c}
+function setLvl(b){document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');S.lvl=+b.dataset.l}
+function players(){
+  const g=S.combo==='mf'?['m','f']:S.combo==='mm'?['m','m']:['f','f'];
+  const def=S.combo==='mf'?['Ele','Ela']:S.combo==='mm'?['Ele 1','Ele 2']:['Ela 1','Ela 2'];
+  return [{n:S.n1||def[0],g:g[0]},{n:S.n2||def[1],g:g[1]}];
+}
+function start(){
+  S.n1=$('n1').value.trim();S.n2=$('n2').value.trim();
+  localStorage.setItem('jq',JSON.stringify(S));
+  $('lvlTag').textContent=lvlName[S.lvl];used={};go('s-menu');
+}
+function fmt(t,a,b){return t.replace(/\{A\}/g,a.n).replace(/\{B\}/g,b.n).replace(/\{Ao\}/g,a.g==='m'?'o':'a').replace(/\{Bo\}/g,b.g==='m'?'o':'a').replace(/@/g,a.g==='m'?'o':'a')}
+const inLvl=l=>l>=S.lvl-1&&l<=S.lvl;
+// sorteia sem repetir até esgotar
+function draw(key,list,w){
+  if(!list.length)return null;
+  used[key]=used[key]||new Set();
+  let free=list.filter(x=>!used[key].has(x));
+  if(!free.length){used[key].clear();free=list}
+  const c=w?wrnd(free,w):rnd(free);used[key].add(c);return c;
+}
+function wrnd(a,w){const ws=a.map(w),t=ws.reduce((x,y)=>x+y,0);let r=Math.random()*t;for(let i=0;i<a.length;i++){r-=ws[i];if(r<=0)return a[i]}return a[a.length-1]}
+const ANAL_W=5; // peso das cartas anais quando quem recebe é ela
+const dw=b=>c=>c[5]&&b.g==='f'?ANAL_W:1;
+function actor(){const p=players();return [p[turn%2],p[(turn+1)%2],turn%2]}
+
+/* ================= TIMER ================= */
+function timerHTML(s){return s?`<div class="timer" id="tm">${fmtT(s)}</div><button class="btn" onclick="startTimer(${s})">⏱️ Iniciar ${fmtT(s)}</button>`:''}
+function fmtT(s){return s>=60?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:`0:${String(s).padStart(2,'0')}`}
+function startTimer(s){stopTimer();unlockAudio();let r=s;timerId=setInterval(()=>{r--;const el=$('tm');if(el)el.textContent=fmtT(Math.max(r,0));if(r<=0){stopTimer();navigator.vibrate&&navigator.vibrate([400,150,400,150,400]);alarm();if(el)el.textContent='⏰ PAREM! Tempo!'}},1000)}
+function stopTimer(){clearInterval(timerId);timerId=null}
+// alarme de despertador (Web Audio, sem arquivo)
+let actx=null;
+function unlockAudio(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}}
+function alarm(){
+  if(!actx)return;const t0=actx.currentTime;
+  for(let i=0;i<12;i++){const o=actx.createOscillator(),g=actx.createGain();o.type='square';o.frequency.value=i%2?880:1320;
+    const t=t0+i*0.22+Math.floor(i/4)*0.35;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.35,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.18);
+    o.connect(g).connect(actx.destination);o.start(t);o.stop(t+0.2)}
+}
+
+/* ================= MODOS ================= */
+const TITLES={mp:'Motelpólio',tb:'Tabuleiro',mt:'Match de Fantasias',bo:'Bomba Safada',cp:'Vales Safados',dm:'Mestre & Escrav(a)',rp:'Roleplay',st:'Strip Roleta',ed:'Quem Goza Primeiro',vd:'Verdade ou Desafio',bb:'Faz ou Bebe',ks:'Roleta Kama Sutra',dd:'Dados Eróticos',en:'Eu Nunca',lt:'Catálogo'};
+function openMode(m){mode=m;clearTimeout(bombT);mtStep=0;mtIdx=0;mtAns=[[],[]];mtPass=false;edN=0;ordN=0;turn=Math.floor(Math.random()*2);$('gTitle').textContent=TITLES[m];$('banner').innerHTML=ART[m];go('s-game');render()}
+function next(){turn++;stopTimer();render()}
+function render(){({mp:rMP,tb:rTB,mt:rMT,bo:rBO,cp:rCP,dm:rDM,rp:rRP,st:rST,ed:rED,vd:rVD,bb:rBB,ks:rKS,dd:rDD,en:rEN,lt:rLT})[mode]();renderScore()}
+function renderScore(){
+  const p=players();
+  $('score').innerHTML=mode==='bb'||mode==='en'?`<span>🍷 ${p[0].n}: ${drinks[0]}</span><span>🍷 ${p[1].n}: ${drinks[1]}</span>`
+   :mode==='vd'?`<span>⭐ ${p[0].n}: ${score[0]}</span><span>⭐ ${p[1].n}: ${score[1]}</span>`:'';
+}
+const turnLine=a=>`<div class="turn">Vez de ${a.n} ${a.g==='m'?'👨':'👩'}</div>`;
+const dareList=(a,b)=>DARES.filter(c=>inLvl(c[0])&&(!c[3]||c[3]===a.g)&&(!c[4]||c[4]===b.g)&&(!c[5]||S.lvl>1));
+
+// Verdade ou Desafio
+function rVD(pick){
+  const [a,b,i]=actor();
+  if(!pick){$('game').innerHTML=`${turnLine(a)}<div class="card"><p class="big">${a.n}, verdade ou desafio?</p></div>
+    <div class="row"><button class="btn" onclick="rVD('v')">🗣️ Verdade</button><button class="btn main-btn" onclick="rVD('d')">😈 Desafio</button></div>`;return}
+  const c=pick==='v'?draw('t'+a.g+b.g,TRUTHS.filter(x=>inLvl(x[0])&&(!x[3]||x[3]===a.g))):draw('d'+a.g+b.g,dareList(a,b),dw(b));
+  $('game').innerHTML=`${turnLine(a)}<div class="card"><span class="tag">${pick==='v'?'VERDADE':'DESAFIO'} · ${lvlName[c[0]]}</span><p class="big">${fmt(c[1],a,b)}</p>${pick==='v'?'':dareImg(c[1])}${timerHTML(c[2])}</div>
+   <div class="row"><button class="btn" onclick="next()">🛑 Passo</button><button class="btn main-btn" onclick="score[${i}]++;next()">✅ Feito</button></div>`;
+}
+// Faz ou Bebe
+function rBB(){
+  const [a,b,i]=actor();const c=draw('b'+a.g+b.g,dareList(a,b),dw(b));
+  $('game').innerHTML=`${turnLine(a)}<div class="card"><span class="tag">FAZ OU BEBE · ${lvlName[c[0]]}</span><p class="big">${fmt(c[1],a,b)}</p>${dareImg(c[1])}${timerHTML(c[2])}</div>
+   <div class="row"><button class="btn" onclick="drinks[${i}]++;next()">🍷 Bebo</button><button class="btn main-btn" onclick="next()">✅ Fiz</button></div>`;
+}
+// Kama Sutra
+function posList(){return POS.filter(p=>p.c.split(' ').includes(S.combo)&&(S.lvl>1||p.d<3))}
+function posCard(p,full){
+  const [a]=actor();
+  const name=p.n.replace('{o}',a.g==='m'?'o':'a');
+  return `<div class="card"><span class="tag">${p.np?'SEM PENETRAÇÃO':'POSIÇÃO'}</span>
+  <p class="big">${name}</p>${posSVG(p)}<p class="legend"><span style="color:#ffc46b">●</span> ${p.np?'quem conduz':'quem penetra'} &nbsp; <span style="color:#ff6b9d">●</span> ${p.np?'parceir'+(a.g==='m'?'o':'a'):'quem recebe'}</p><p class="stars">Dificuldade: ${'★'.repeat(p.d)}${'☆'.repeat(3-p.d)}</p>
+  <p class="note" style="color:var(--txt);font-size:1rem">${p.t}</p>${p.np?'':`<p class="note">💡 ${TIPS[S.combo]}</p>`}${full||''}</div>`;
+}
+function rKS(){
+  const p=draw('k'+S.combo,posList());let m=draw('m',MODS.filter(x=>x[0]<=S.lvl));
+  if(!p.np&&S.lvl>1&&S.combo!=='mm'&&Math.random()<.45)m=[3,rnd(ANAL_MODS)];
+  const secs=[60,120,180,300][Math.min(S.lvl+Math.floor(Math.random()*2),3)];
+  $('game').innerHTML=posCard(p,`<p class="note">🎯 Regra extra: <b style="color:var(--gold)">${m[1]}</b></p>${timerHTML(secs)}`)+
+   `<button class="btn main-btn" onclick="next()">🔄 Próxima posição</button>`;
+}
+// Dados
+function rDD(roll){
+  const [a,b]=actor();
+  const acts=ACTS.filter(x=>x[0]<=S.lvl),parts=PARTS.filter(x=>x[0]<=S.lvl);
+  if(!roll){$('game').innerHTML=`${turnLine(a)}<div class="dice"><div>❔</div><div>❔</div><div>❔</div></div>
+    <button class="btn main-btn" onclick="rDD(1)">🎲 Rolar dados</button>`;return}
+  const pl=b.g==='f'&&S.lvl===3?parts.concat([[3,'🍑 Cuzinho'],[3,'🍑 Cuzinho'],[3,'🍑 Cuzinho']]):parts;
+  const ac=rnd(acts)[1],pa=fmt(rnd(pl)[1],a,b),ti=Math.floor(Math.random()*TIMES.length);
+  $('game').innerHTML=`${turnLine(a)}<p class="note" style="text-align:center">${a.n} faz em ${b.n}:</p>
+   <div class="dice shake"><div>${ac}</div><div>${pa}</div><div>${TIMES[ti]}</div></div>${timerHTML(TSEC[ti])}
+   <button class="btn main-btn" onclick="next()">➡️ Passar a vez</button>`;
+}
+
+// Mestre & Escrav(a)
+const ORDERS=[
+[1,'Fique de joelhos na minha frente.'],[1,'Me chame de senhor/senhora até o fim do jogo.'],[1,'Beije meus pés subindo até onde eu mandar.'],
+[1,'Mãos para trás. Você não pode usar as mãos.'],[1,'Me agradeça depois de cada ordem.'],[1,'Tire minha roupa só com os dentes.'],
+[2,'Tire sua roupa devagar enquanto eu só olho.'],[2,'Chupe meus dedos como se fosse outra coisa.'],[2,'Lamba de onde eu apontar até eu mandar parar.'],
+[2,'Fique de quatro e não se mexa enquanto eu te toco.'],[2,'Conte os tapas em voz alta: 10 na bunda.'],[2,'Venda nos olhos: adivinhe onde estou tocando ou leva tapa.'],
+[2,'Peça "por favor" antes de cada toque.'],[2,'Se masturbe pra mim. Proibido gozar sem permissão.'],
+[3,'Me chupa até eu mandar parar.'],[3,'Implore pra eu te comer. Convence.'],[3,'Abre a bunda pra mim e fica parad@.'],
+[3,'Você só goza quando eu contar até 3. Antes disso, castigo.'],[3,'Senta em mim e só mexe quando eu mandar.'],
+[3,'De joelhos, boca aberta, olhando pra mim.'],[3,'Eu gozo onde eu quiser e você agradece.'],[3,'De quatro. Vou te usar por 2 minutos do meu jeito.'],
+[3,'Fala o que você é minha/meu. Bem alto.'],[3,'Lambe tudo que eu sujar.'],[3,'Pede pra levar no cu. Implorando.'],
+];
+let boss=0,ordN=0;
+function rDM(swap){
+  const p=players();if(swap){boss=1-boss;ordN=0}
+  const a=p[boss],b=p[1-boss];ordN++;
+  const o=draw('o'+boss,ORDERS.filter(x=>x[0]<=S.lvl));
+  $('game').innerHTML=`<div class="turn">👑 ${a.n} manda · ⛓️ ${b.n} obedece</div>
+   <div class="card"><span class="tag">ORDEM ${ordN}</span><p class="big">“${o[1].replace(/@/g,b.g==='m'?'o':'a')}”</p><p class="note">${a.n} lê em voz alta. ${b.n} só responde “sim, ${a.g==='m'?'senhor':'senhora'}”.</p></div>
+   <button class="btn main-btn" onclick="rDM()">⛓️ Próxima ordem</button><button class="btn" onclick="rDM(1)">🔄 Trocar quem manda</button>`;
+}
+// Roleplay
+const RP=[
+'💼 Chefe e funcionári{Bo}: {B} veio pedir aumento. {A} decide o “preço”.',
+'💆 Massagista: {A} é massagista e {B} é cliente. A massagem vai longe demais.',
+'🍸 Desconhecidos no bar: {A} chega cantando {B}. Vocês nunca se viram.',
+'🚗 Motorista de app: {B} está sem dinheiro pra pagar a corrida de {A}.',
+'🚔 Revista policial: {A} revista {B} de cima a baixo. Algemas liberadas.',
+'🩺 Consulta médica: {A} examina {B}… com muita atenção aos detalhes.',
+'🏋️ Personal trainer: alongamento com muito contato e zero profissionalismo.',
+'💃 Stripper e cliente: {A} faz lap dance. {B} não pode tocar — até não aguentar.',
+'🚪 Vizinh{Ao}: {A} bate na porta pedindo açúcar. {B} atende só de toalha.',
+'🔧 Encanador(a): {A} veio consertar o chuveiro e {B} não tem como pagar.',
+'💔 Ex que voltou: transa de reconciliação, com raiva e saudade.',
+'📸 Ensaio sensual: {A} fotografa {B} pedindo poses cada vez mais ousadas.',
+'🛎️ Room service: {A} leva o pedido no quarto de hotel de {B}.',
+'🎭 Tinder: vocês se conheceram há 1 hora e já estão pelados.',
+'🎬 Atores pornô: {A} dirige a cena e {B} tem que fazer tudo que o roteiro mandar.',
+];
+const RP_RULES=['{B} não pode dizer “não” durante a cena.','Proibido sair do personagem, nem rindo.','{A} tem que fazer {B} gozar antes de acabar a cena.','A cena termina com sexo no lugar que {B} escolher.','Usem nomes falsos o tempo todo.','{B} tem que resistir até o fim do timer.','A cena termina com anal (se toparem).'];
+function rRP(){
+  const [a,b]=actor();const r=draw('rp',RP);
+  $('game').innerHTML=`<div class="card"><span class="tag">CENA</span><p class="big">${fmt(r,a,b)}</p>
+   <p class="note">🤫 Regra secreta: <b style="color:var(--gold)">${fmt(rnd(RP_RULES),a,b)}</b></p>${timerHTML(600)}</div>
+   <button class="btn main-btn" onclick="next()">🎭 Outra cena</button>`;
+}
+// Strip Roleta
+const STRIP=[
+['{A} tira uma peça.'],['{B} tira uma peça.'],['Os dois tiram uma peça.'],['{A} tira uma peça de {B} com a boca.'],
+['{A} escolhe qual peça {B} vai tirar.'],['{B} tira uma peça de {A} bem devagar.'],['Sorte! {A} pode vestir uma peça de volta.'],
+['Toque livre: {A} toca {B} onde quiser.',20],['{B} dança enquanto tira uma peça.',30],['{A} tira a peça mais íntima que ainda estiver usando.'],
+['Quem já está pelad{Ao}: rebole pra {B}.',30],['{B} tira uma peça e joga na cara de {A}.'],['{A} chupa {B} por cima da roupa íntima.',20]];
+function rST(){
+  const [a,b]=actor();const c=rnd(STRIP);
+  $('game').innerHTML=`<div class="card shake" style="text-align:center"><span class="tag">STRIP</span><p class="big">${fmt(c[0],a,b)}</p>${timerHTML(c[1])}</div>
+   <button class="btn main-btn" onclick="next()">🎰 Girar</button>`;
+}
+// Quem goza primeiro perde
+const EDGE=[
+[1,'Beijo de língua com mãos por cima da roupa.',60],[1,'Mãos por baixo da roupa. Só mãos.',60],[2,'Pelados: masturbação mútua.',90],
+[2,'{A} chupa {B} (depois invertam).',90],[3,'69.',120],[3,'Brinquedo no máximo em quem estiver por baixo.',90],[3,'Sexo na posição que {B} escolher.',120],
+[3,'Sexo, ritmo máximo.',120],[3,'Anal pra ela (se toparem) ou a posição mais funda que vocês conhecem.',120]];
+const PUNISH=['O perdedor chupa o vencedor até ele(a) gozar também.','O perdedor vira escrav@ por 10 minutos.','O perdedor leva 10 tapas na bunda.','O perdedor realiza a fantasia que o vencedor escolher.','O perdedor lava a louça pelad@ amanhã.','Revanche em 20 minutos. O perdedor que se recupere.','O perdedor dá o cu / faz o que o vencedor mandar (dentro dos limites).'];
+let edN=0;
+function rED(k){
+  const [a,b]=actor();
+  if(k==='lose'){$('game').innerHTML=`<div class="card"><span class="tag">💦 ALGUÉM GOZOU</span><p class="big">Castigo:</p><p class="big" style="color:var(--gold)">${rnd(PUNISH).replace(/@/g,'(a)')}</p></div><button class="btn main-btn" onclick="edN=0;rED()">🔁 Jogar de novo</button>`;return}
+  const L=EDGE.filter(x=>x[0]<=S.lvl);const r=L[Math.min(edN,L.length-1)];edN++;
+  $('game').innerHTML=`<div class="card"><span class="tag">RODADA ${edN}/${L.length}</span><p class="big">${fmt(r[1],a,b)}</p><p class="note">Quem gozar primeiro perde. Segura!</p>${timerHTML(r[2])}</div>
+   <div class="row"><button class="btn" onclick="rED('lose')">💦 Alguém gozou</button><button class="btn main-btn" onclick="stopTimer();turn++;rED()">🔥 Próxima rodada</button></div>`;
+}
+
+
+// ===== MOTELPÓLIO — Banco Imobiliário safado =====
+// versões: 1 Leve 🍹 · 2 Pesado 🥃 · 3 Sem limites 🔥
+const MPV=['','🍹 Leve','🥃 Pesado','🔥 Sem limites'];
+const GC=['','#ff6b9d','#ff8a3d','#e0245e','#9b5de5','#3aa0ff','#2ecc71','#ffc46b','#555'];
+// [tipo, emoji, nome, grupo, preço, [aluguel safado leve, pesado, sem limites]]  — {A}=quem paga, {B}=dono
+const MPB=[
+['go','🚩','Início'],
+['p','🛋️','Sofá',1,60,['{A} faz cafuné e beija o pescoço de {B} no sofá.','{A} faz lap dance pra {B} no sofá.','Sexo no sofá, na posição que {B} mandar.']],
+['s','🍀','Sorte'],
+['p','🍳','Cozinha',1,60,['{A} dá comida na boca de {B} e beija em seguida.','{A} chupa {B} encostad{Bo} na pia.','Sexo na bancada da cozinha. {B} escolhe quem fica em cima.']],
+['bar','🍺','Bar'],
+['p','🛁','Banheira',2,100,['{A} ensaboa as costas de {B}.','{A} dá banho em {B} inteir{Bo}, lavando tudo com a mão.','Sexo no chuveiro, {A} contra a parede.']],
+['p','🪜','Escada',2,100,['{A} sobe engatinhando até {B} e beija.','{A} chupa {B} sentad{Bo} no degrau.','{A} de quatro na escada. {B} faz o que quiser.']],
+['jail','⛓️','Algemado'],
+['p','🌇','Varanda',3,140,['Beijo de 1 minuto na janela.','{A} se masturba na janela pra {B} ver.','Rapidinha na varanda/janela (sem ninguém ver).']],
+['r','💥','Revés'],
+['p','🧺','Lavanderia',3,140,['{A} senta na máquina de lavar e beija {B}.','Oral em {B} sentad{Bo} na máquina de lavar.','Sexo em cima da máquina de lavar ligada.']],
+['tax','👙','Imposto'],
+['p','🚗','Carro',4,180,['Amasso no banco de trás (ou no sofá fingindo).','{A} masturba {B} escondido, como se estivessem no carro.','Sexo no carro na garagem. Valendo.']],
+['p','🏚️','Garagem',4,180,['{A} prende {B} contra a parede e beija.','{A} de joelhos na frente de {B} contra a parede.','{A} contra a parede, {B} mete/usa como quiser.']],
+['hot','🫧','Hidro'],
+['p','🏖️','Praia',5,220,['Massagem com creme nas costas de {B}.','Massagem com óleo que termina entre as pernas de {B}.','Corpo inteiro no óleo e sexo escorregadio.']],
+['s','🍀','Sorte'],
+['p','💦','Cachoeira',5,220,['{A} derrama um pouco de bebida no pescoço de {B} e lambe.','Body shot: {A} bebe do umbigo de {B}.','{B} escolhe onde derramar a bebida e {A} lambe tudo.']],
+['shop','🛍️','Sex Shop'],
+['p','🏩','Motel Paradise',6,260,['{A} faz striptease até a roupa íntima.','{A} faz striptease completo e lap dance pelad{Ao}.','Posição do Kama Sutra que {B} escolher, 3 minutos.']],
+['p','🪷','Motel Kama',6,260,['Lótus de roupa por 1 min, se beijando.','Posição sorteada, pelados, 2 minutos.','A posição mais difícil do catálogo, até alguém gozar.']],
+['gojail','🚨','Vá p/ Algemado'],
+['p','👑','Suíte Presidencial',7,320,['{A} serve {B} como garçom/garçonete por 5 min.','{A} vira escrav{Ao} de {B} por 5 min.','{A} vira escrav{Ao} sexual de {B} por 10 min.']],
+['bar','🥃','Bar'],
+['p','🛥️','Iate',7,320,['Brinde e dança colada.','{A} faz oral em {B} até {B} mandar parar.','{A} faz {B} gozar, do jeito que {B} pedir.']],
+['r','💥','Revés'],
+['p','⛓️‍💥','Quarto Vermelho',8,400,['Venda em {A}: {B} beija onde quiser por 1 min.','{A} vendad{Ao} e amarrad{Ao}: {B} brinca por 3 min.','{A} amarrad{Ao}: tapas, brinquedo e o que {B} quiser.']],
+['p','🌑','Dark Room',8,400,['Luz apagada: só tato, 1 minuto.','Luz apagada: {A} chupa {B} sem ver nada.','Anal no escuro (se toparem). Senão, o mais sujo que vocês conhecem.']],
+];
+const DRINK=['','1 gole','2 goles','1 shot'];
+const SORTE=[
+[1,'Elogio picante: {B} te elogia em voz alta. Ganhe',100],
+[1,'Escolha onde {B} te beija. Ganhe',150],
+[1,'Avance até o Início.',0,{go:0}],
+[1,'Vale-escape! Guarde: pula um aluguel safado sem pagar.',0,{wild:1}],
+[1,'Brinde! Os dois bebem e você ganha',50],
+[2,'{B} tira uma peça pra você. Ganhe',100],
+[2,'Body shot: beba do corpo de {B}. Ganhe',100],
+[2,'Avance até o Motel Paradise.',0,{go:19}],
+[2,'{B} te faz uma massagem onde você quiser (1 min). Ganhe',50],
+[3,'{B} te chupa por 1 minuto. E você ainda ganha',100],
+[3,'{B} fica de quatro pra você por 1 minuto. Ganhe',100],
+[3,'Avance até o Dark Room.',0,{go:27}],
+[3,'Você manda em {B} por 3 minutos. Ganhe',50],
+];
+const REVES=[
+[1,'Pague 100 ou tire uma peça.',-100,{or:'Tiro uma peça'}],
+[1,'Vá direto pro Algemado.',0,{jail:1}],
+[1,'Beba 2 goles. Sem desculpa.',0],
+[1,'Volte 3 casas.',0,{back:3}],
+[2,'Pague 150 ou faça lap dance de 1 minuto pra {B}.',-150,{or:'Faço a lap dance'}],
+[2,'{B} te dá 5 tapas na bunda. E você paga',-50],
+[2,'Pague 100 ou fique sem roupa íntima até o fim.',-100,{or:'Tiro'}],
+[3,'Shot! E pague',-50],
+[3,'Pague 200 ou chupe {B} até {B} mandar parar.',-200,{or:'Chupo'}],
+[3,'Pague 200 ou dê o cuzinho pra {B} (se topar).',-200,{or:'Topo 🍑'},'f'],
+[3,'Pague 150 ou {B} goza onde quiser em você.',-150,{or:'Topo'}],
+];
+let mp=null;
+function mpNew(v){mp={v,pos:[0,0],cash:[1000,1000],own:{},su:{},jail:[0,0],wild:[0,0],pot:0,dice:null,dbl:0,panel:'',over:false};rMP()}
+function mpCell(i){if(i<=7)return[1,i+1];if(i<=14)return[i-6,8];if(i<=21)return[8,8-(i-14)];return[8-(i-21),1]}
+function mpGroup(g){return MPB.map((c,i)=>i).filter(i=>MPB[i][3]===g)}
+function mpHasSet(o,g){return mpGroup(g).every(i=>mp.own[i]===o)}
+function mpRent(i){const c=MPB[i],o=mp.own[i];return Math.round(c[4]/4*(mpHasSet(o,c[3])?2:1)*(1+(mp.su[i]||0)))}
+function mpDrinks(i){const n=1+(mp.su[i]||0)+(mpHasSet(mp.own[i],MPB[i][3])?1:0);if(mp.v===3){const sh=Math.min(n,2);return `${sh} shot${sh>1?'s':''}`}const g=Math.min(n*mp.v,4);return `${g} gole${g>1?'s':''}`} // limite: 2 shots / 4 goles
+function mpPay(i,amt,to){mp.cash[i]-=amt;if(to===undefined||to===null)mp.pot+=Math.max(0,amt);else mp.cash[to]+=amt}
+function mpT(t,a,b){return fmt(t,a,b)}
+function mpEnd(){ // fim de turno
+  const p=players();
+  if(mp.cash.some(c=>c<0)){const l=mp.cash[0]<0?0:1;mpOver(l);return}
+  if(mp.dice&&mp.dice[0]===mp.dice[1]&&mp.dbl<3&&!mp.jail[turn%2]){mp.panel='';mp.dice=null;rMP();return}
+  mp.dbl=0;mp.dice=null;turn++;mp.panel='';rMP()
+}
+const MP_LOSE=['','O perdedor faz massagem de 20 minutos no vencedor.','O perdedor vira escrav@ do vencedor pelo resto da noite.','O perdedor é usad@ do jeito que o vencedor quiser — inclusive anal, se toparem.'];
+function mpOver(l){const p=players();mp.over=true;
+  mp.panel=`<div class="card"><span class="tag">💸 FALÊNCIA</span><p class="big">${p[l].n} faliu! ${p[1-l].n} é dono(a) da noite.</p><p class="note" style="color:var(--txt)">${MP_LOSE[mp.v].replace(/@/g,p[l].g==='m'?'o':'a')}</p></div><button class="btn main-btn" onclick="mp=null;rMP()">🔁 Nova partida</button>`;rMP()}
+function mpQuit(){const w=mp.cash[0]>=mp.cash[1]?0:1;mpOver(1-w)}
+function mpBtns(arr){return `<div class="row" style="flex-wrap:wrap">${arr.map(([t,js,main])=>`<button class="btn ${main?'main-btn':''}" style="flex:1 1 45%" onclick="${js}">${t}</button>`).join('')}</div>`}
+function mpLand(){
+  const p=players(),i=turn%2,a=p[i],b=p[1-i],k=mp.pos[i],c=MPB[k],t=c[0];let h='',btn=[];
+  const card=(tag,body)=>`<div class="card"><span class="tag">${tag}</span><p class="big" style="font-size:1.15rem">${body}</p></div>`;
+  if(t==='go'){h=card('🚩 INÍCIO','Caiu no Início: +200 e os dois brindam.');btn=[['Ok','mpEnd()',1]]}
+  else if(t==='p'){
+    const o=mp.own[k];
+    if(o===undefined){h=card(`${c[1]} ${c[2]} · 🔥${c[4]}`,`Comprar ${c[2]}? Aluguel safado aqui: <br><small class="note">“${mpT(c[5][mp.v-1],b,a)}”</small>`);
+      btn=[[`💰 Comprar (🔥${c[4]})`,`mp.cash[${i}]-=${c[4]};mp.own[${k}]=${i};mpEnd()`,mp.cash[i]>=c[4]],['Passar','mpEnd()']];if(mp.cash[i]<c[4])btn=[['Sem grana. Passar','mpEnd()',1]]}
+    else if(o===i){const su=mp.su[k]||0,set=mpHasSet(i,c[3]),cost=c[4]/2;
+      h=card(`${c[1]} ${c[2]} · seu`,set?`Você tem o conjunto! ${su<3?`Construir suíte ⭐ por 🔥${cost}? (aluguel e bebida sobem)`:'Já tem 3 suítes.'}`:'Seu imóvel. Junte o par da mesma cor pra dobrar o aluguel.');
+      btn=set&&su<3&&mp.cash[i]>=cost?[[`⭐ Construir (🔥${cost})`,`mp.cash[${i}]-=${cost};mp.su[${k}]=${su+1};mpEnd()`,1],['Agora não','mpEnd()']]:[['Ok','mpEnd()',1]]}
+    else{const r=mpRent(k);
+      h=card(`${c[1]} ${c[2]} · de ${b.n}${mp.su[k]?' '+'⭐'.repeat(mp.su[k]):''}`,`Aluguel pra ${b.n}! Escolha como pagar:<br><small class="note">😈 “${mpT(c[5][mp.v-1],a,b)}”</small>`);
+      btn=[[`💸 Pagar 🔥${r}`,`mpPay(${i},${r},${1-i});mpEnd()`],[`😈 Pagar safado`,`mpEnd()`,1],[`🍺 Beber ${mpDrinks(k)}`,`mpEnd()`]];
+      if(mp.wild[i])btn.push([`🃏 Usar vale-escape`,`mp.wild[${i}]--;mpEnd()`]);}
+  }
+  else if(t==='s'||t==='r'){const L=(t==='s'?SORTE:REVES).filter(x=>x[0]<=mp.v&&(!x[4]||x[4]===a.g));const x=t==='r'?wrnd(L,y=>y[4]?ANAL_W:1):rnd(L);const e=x[3]||{};
+    const txt=mpT(x[1],a,b)+(x[2]&&!e.or?` <b style="color:var(--gold)">${x[2]>0?'+':''}${x[2]}</b>`:'');
+    h=card(t==='s'?'🍀 SORTE SAFADA':'💥 REVÉS',txt);
+    if(e.or)btn=[[`💸 Pagar ${-x[2]}`,`mpPay(${i},${-x[2]});mpEnd()`],[`😈 ${e.or}`,'mpEnd()',1]];
+    else if(e.go!==undefined)btn=[['Ir',`if(${e.go}<mp.pos[${i}])mp.cash[${i}]+=200;mp.pos[${i}]=${e.go};mpLand()`,1]];
+    else if(e.back)btn=[['Voltar',`mp.pos[${i}]=(mp.pos[${i}]+28-3)%28;mpLand()`,1]];
+    else if(e.jail)btn=[['⛓️ Ir algemad'+(a.g==='m'?'o':'a'),`mp.pos[${i}]=7;mp.jail[${i}]=1;mp.dice=null;mpEnd()`,1]];
+    else if(e.wild)btn=[['🃏 Guardar',`mp.wild[${i}]++;mpEnd()`,1]];
+    else btn=[['Ok',`mp.cash[${i}]+=${x[2]<0?x[2]:x[2]};if(${x[2]}<0)mp.pot+=${-x[2]};mpEnd()`,1]];}
+  else if(t==='bar'){h=card('🍺 BAR',`${a.n} bebe ${DRINK[mp.v]}.${mp.v>1?` Ou faz body shot no corpo de ${b.n}.`:''}`);btn=[['🍺 Bebi','mpEnd()',1]]}
+  else if(t==='tax'){const amt=[0,100,150,200][mp.v],alt=['','tira uma peça','fica pelad'+(a.g==='m'?'o':'a')+' da cintura pra baixo','fica pelad'+(a.g==='m'?'o':'a')+' até o fim do jogo'][mp.v];
+    h=card('👙 IMPOSTO',`Pague 🔥${amt} (vai pra Hidro) ou ${alt}.`);btn=[[`💸 Pagar ${amt}`,`mpPay(${i},${amt});mpEnd()`],[`👙 ${alt}`,'mpEnd()',1]]}
+  else if(t==='hot'){const pot=mp.pot;h=card('🫧 HIDRO',`${a.n} leva o pote: 🔥${pot}!<br><small class="note">${['','Os dois: beijo de 30 s.','Os dois: banho juntos agora (ou 2 min de amasso pelados).','Os dois: 69 por 1 minuto.'][mp.v]}</small>`);btn=[['🫧 Pegar',`mp.cash[${i}]+=mp.pot;mp.pot=0;mpEnd()`,1]]}
+  else if(t==='shop'){h=card('🛍️ SEX SHOP',`Compre um vale-escape (pula um aluguel safado) por 🔥150.${mp.v>1?` Ou use um brinquedo em ${b.n} por 1 min e ganhe 🔥100.`:''}`);
+    btn=[[`🃏 Comprar 150`,`mp.cash[${i}]-=150;mp.wild[${i}]++;mpEnd()`,mp.cash[i]>=150],...(mp.v>1?[[`🔋 Brinquedo (+100)`,`mp.cash[${i}]+=100;mpEnd()`]]:[]),['Sair','mpEnd()']]}
+  else if(t==='gojail'){h=card('🚨 VÁ ALGEMADO',`${a.n} vai pro Algemado. Mãos amarradas de verdade até sair.`);btn=[['⛓️ Ir',`mp.pos[${i}]=7;mp.jail[${i}]=1;mp.dice=null;mpEnd()`,1]]}
+  else if(t==='jail'){h=card('⛓️ ALGEMADO','Só visitando… mas aproveita e dá um beijo.');btn=[['Ok','mpEnd()',1]]}
+  mp.panel=h+mpBtns(btn);rMP();
+}
+function mpRoll(){
+  const i=turn%2;const d=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)];mp.dice=d;
+  if(d[0]===d[1])mp.dbl++;else mp.dbl=0;
+  if(mp.dbl>=3){mp.pos[i]=7;mp.jail[i]=1;mp.panel=`<div class="card"><span class="tag">🎲 3 DUPLAS</span><p class="big">Apressad${players()[i].g==='m'?'o':'a'}! Vai algemad${players()[i].g==='m'?'o':'a'}.</p></div>`+mpBtns([['Ok','mp.dbl=0;mpEnd()',1]]);rMP();return}
+  const np=mp.pos[i]+d[0]+d[1];if(np>=28){mp.cash[i]+=200}
+  mp.pos[i]=np%28;mpLand();
+}
+function mpJail(act){
+  const p=players(),i=turn%2,a=p[i],b=p[1-i];
+  if(act==='pay'){mp.cash[i]-=100;mp.pot+=100;mp.jail[i]=0;mpRoll();return}
+  if(act==='dare'){mp.jail[i]=0;mpRoll();return}
+  const d=[1+Math.floor(Math.random()*6),1+Math.floor(Math.random()*6)];mp.dice=d;
+  if(d[0]===d[1]){mp.jail[i]=0;mp.dbl=0;const np=mp.pos[i]+d[0]+d[1];mp.pos[i]=np%28;mp.dice=[d[0],d[0]+0.5];mpLand();return}
+  mp.jail[i]++;if(mp.jail[i]>3){mp.cash[i]-=100;mp.pot+=100;mp.jail[i]=0}
+  mp.panel=`<div class="card"><span class="tag">🎲 ${d[0]} · ${d[1]}</span><p class="big">Não saiu dupla. Continua algemad${a.g==='m'?'o':'a'}.</p></div>`+mpBtns([['Ok','mp.dice=null;mpEnd()',1]]);rMP();
+}
+function rMP(){
+  if(!mp){$('game').innerHTML=`<div class="card"><p class="big">🏩 Motelpólio</p><p class="note" style="color:var(--txt)">Banco Imobiliário safado. Cada um começa com 🔥1000. Compre os cômodos e motéis. Quem cair no seu imóvel paga aluguel: em fichas, bebendo ou cumprindo o <b>aluguel safado</b> do lugar. Junte o par da mesma cor pra dobrar e construa suítes ⭐. Quem falir perde a noite.</p></div>
+    <h2>Escolha a versão</h2>${[1,2,3].map(v=>`<button class="btn ${v===3?'main-btn':''}" onclick="mpNew(${v})">${MPV[v]}<br><small style="font-weight:400">${['','beijos, strip, goles','oral, body shot, 2 goles','sexo, anal, shots'][v]}</small></button>`).join('')}`;return}
+  const p=players(),i=turn%2,tk=['🔴','🔵'];
+  const cells=MPB.map((c,k)=>{const [r,cl]=mpCell(k),o=mp.own[k];
+    return `<div class="mc ${mp.pos[i]===k?'now':''}" style="grid-row:${r};grid-column:${cl};${o!==undefined?`border-color:${o?'#3aa0ff':'#e0245e'}`:''}">${c[3]?`<span class="bar" style="background:${GC[c[3]]}"></span>`:''}${c[1]}<i>${c[2]}</i>${mp.su[k]?`<span class="st">${'★'.repeat(mp.su[k])}</span>`:''}<span class="tk">${mp.pos[0]===k?tk[0]:''}${mp.pos[1]===k?tk[1]:''}</span></div>`}).join('');
+  const dice=mp.dice?`<div class="dd">${'⚀⚁⚂⚃⚄⚅'[mp.dice[0]-1]}${'⚀⚁⚂⚃⚄⚅'[Math.floor(mp.dice[1])-1]}</div>`:'';
+  const center=`<div class="mcen"><span class="tag">${MPV[mp.v]}</span><div class="cash"><span>${tk[0]} ${p[0].n}<br>🔥${mp.cash[0]}${mp.wild[0]?' 🃏'+mp.wild[0]:''}</span><span>${tk[1]} ${p[1].n}<br>🔥${mp.cash[1]}${mp.wild[1]?' 🃏'+mp.wild[1]:''}</span></div>${dice}<small class="note">🫧 Pote: 🔥${mp.pot}</small></div>`;
+  let panel=mp.panel;
+  if(!panel&&!mp.over){const a=p[i],b=p[1-i];
+    panel=mp.jail[i]?`${turnLine(a)}<div class="card"><span class="tag">⛓️ ALGEMADO (tentativa ${mp.jail[i]}/3)</span><p class="big" style="font-size:1.1rem">Mãos amarradas. Pra sair: tire dupla, pague 🔥100 ou ${['','beije '+b.n+' por 1 minuto','faça oral em '+b.n+' por 1 minuto','faça '+b.n+' gozar'][mp.v]}.</p></div>`+mpBtns([['🎲 Tentar dupla','mpJail()',1],['💸 Pagar 100','mpJail(\'pay\')'],['😈 Fazer','mpJail(\'dare\')']])
+     :`${turnLine(a)}${mpBtns([['🎲 Rolar dados','mpRoll()',1]])}`;}
+  $('game').innerHTML=`<div class="mpb">${cells}${center}</div>${panel}${mp.over?'':`<button class="btn" style="margin-top:14px;font-size:.85rem" onclick="if(confirm('Encerrar? Quem tiver mais fichas vence.'))mpQuit()">🏁 Encerrar partida</button>`}`;
+}
+// ===== Tabuleiro do Prazer (inspirado em tabuleiros eróticos tipo Monogamy) =====
+const SQ={d:['😈','Desafio'],v:['🗣️','Verdade'],b:['🍷','Bebe'],k:['🔞','Posição'],t:['👙','Strip'],a:['🍑','Anal'],s:['⏩','+2'],r:['⏪','-3'],x:['💀','Castigo']};
+const BOARD='0dvbtkdsvarxdbktvadsrkbx'.split(''); // casa 0 = saída; última = chegada
+BOARD[0]='0';BOARD.push('f');
+let pos=[0,0],tbMsg='';
+function tbCard(t,a,b){
+  if(t==='d')return fmt(draw('tbd',dareList(a,b),dw(b))[1],a,b);
+  if(t==='v')return fmt(draw('tbv',TRUTHS.filter(x=>inLvl(x[0])&&(!x[3]||x[3]===a.g)))[1],a,b);
+  if(t==='b')return `${a.n} bebe 2 goles — ou faz: ${fmt(draw('tbd',dareList(a,b),dw(b))[1],a,b)}`;
+  if(t==='k'){const p=draw('tbk',posList());return `Posição: <b>${p.n.replace('{o}','o')}</b> por 1 minuto.${posSVG(p).replace('class="pimg"','class="dimg"')}`}
+  if(t==='t')return fmt(rnd(STRIP)[0],a,b);
+  if(t==='a'){if(a.g==='f'&&b.g!=='f')[a,b]=[b,a];const L=DARES.filter(c=>c[5]&&(!c[3]||c[3]===a.g)&&(!c[4]||c[4]===b.g)&&c[0]<=Math.max(S.lvl,2));
+    return L.length?fmt(rnd(L)[1],a,b):fmt(draw('tbd',dareList(a,b))[1],a,b)}
+  if(t==='x')return `Castigo: ${fmt(rnd(ORDERS.filter(x=>x[0]<=S.lvl))[1],b,a).replace(/@/g,a.g==='m'?'o':'a')} <br><small>(${b.n} manda, ${a.n} obedece)</small>`;
+  return '';
+}
+function rTB(roll){
+  const p=players();const [a,b,i]=actor();
+  if(roll){
+    const d=1+Math.floor(Math.random()*6);let np=Math.min(pos[i]+d,BOARD.length-1);let t=BOARD[np];let extra='';
+    if(t==='s'){np=Math.min(np+2,BOARD.length-1);extra=' ⏩ Sorte! +2.'}
+    if(t==='r'){np=Math.max(np-3,0);extra=' ⏪ Azar! Volta 3.'}
+    pos[i]=np;t=BOARD[np];
+    if(t==='f'){tbMsg=`<div class="card"><span class="tag">🏆 CHEGADA</span><p class="big">${a.n} venceu!</p><p class="note" style="color:var(--txt)">${a.n} escolhe qualquer fantasia e ${b.n} realiza agora. Sem direito a recusa (dentro dos limites).</p></div><button class="btn main-btn" onclick="pos=[0,0];tbMsg='';rTB()">🔁 Nova partida</button>`;}
+    else tbMsg=`<div class="card"><span class="tag">🎲 ${d} · ${SQ[t]?SQ[t][0]+' '+SQ[t][1]:'Início'}</span><p class="big">${a.n}${extra}</p><p class="big" style="font-size:1.1rem">${tbCard(t,a,b)}</p></div><button class="btn main-btn" onclick="turn++;tbMsg='';rTB()">➡️ Vez de ${b.n}</button>`;
+  }
+  const cells=BOARD.map((t,k)=>`<div class="sq ${k===pos[i]?'hot':''}">${t==='0'?'🚩':t==='f'?'🏆':SQ[t][0]}<small>${t==='0'?'Saída':t==='f'?'Fim':SQ[t][1]}</small><span class="pw">${pos[0]===k?(p[0].g==='m'?'🔵':'🔴'):''}${pos[1]===k?(p[1].g==='m'?'🟦':'🟥'):''}</span></div>`).join('');
+  $('game').innerHTML=`<div class="note" style="text-align:center">${p[0].g==='m'?'🔵':'🔴'} ${p[0].n} · ${p[1].g==='m'?'🟦':'🟥'} ${p[1].n}</div><div class="board">${cells}</div>`+
+   (tbMsg||`${turnLine(a)}<button class="btn main-btn" onclick="rTB(1)">🎲 Rolar dado</button>`);
+}
+
+// ===== Match de Fantasias (inspirado no Kindu / listas sim-não-talvez) =====
+const KINKS=[
+[1,'Transar no banho'],[1,'Lingerie / cueca nova só pra isso'],[1,'Massagem que termina em sexo'],[1,'Transar com a luz acesa e espelho'],
+[1,'Sexting durante o dia'],[1,'Rapidinha num lugar da casa diferente'],[1,'Venda nos olhos'],[1,'Lap dance'],
+[2,'Amarrar as mãos'],[2,'Tapas na bunda'],[2,'Puxar cabelo'],[2,'Falar palavrão / dirty talk pesado'],[2,'Brinquedos (vibrador, anel)'],
+[2,'Roleplay com fantasia'],[2,'Filmar ou fotografar a gente'],[2,'Sexo no carro'],[2,'Assistir pornô juntos'],[2,'Gozar no corpo'],
+[2,'Edging (segurar o orgasmo)'],[2,'Dominação: um manda, o outro obedece'],
+[3,'Sexo anal (ela recebe)',null,'f'],[3,'Plug anal durante o sexo'],[3,'Beijo grego'],[3,'Garganta profunda'],[3,'Gozar na boca'],
+[3,'Cuspir'],[3,'Mão no pescoço (de leve)'],[3,'Sexo em lugar público (com risco)'],[3,'Algemas de verdade'],
+[3,'Dupla penetração com brinquedo'],[3,'Ménage (fantasia ou de verdade)'],[3,'Sexo no ritmo bruto, sem carinho'],[3,'Ser chamad@ de putinha/safad@'],
+];
+let mtStep=0,mtIdx=0,mtAns=[[],[]],mtPass=false,mtBoth=[];
+function mtList(){const p=players();return KINKS.filter(k=>k[0]<=S.lvl&&(!k[3]||p.some(x=>x.g===k[3])))}
+function mtVote(v){mtAns[mtStep][mtIdx]=v;mtIdx++;if(mtIdx>=mtList().length){mtStep++;mtIdx=0;if(mtStep===1)mtPass=true}rMT()}
+function mtPick(){$('mtp').innerHTML=`<div class="coupon">Hoje é: <b>${rnd(mtBoth)}</b></div>`}
+function rMT(reset){
+  if(reset){mtStep=0;mtIdx=0;mtAns=[[],[]];mtPass=false}
+  const p=players(),L=mtList(),g=t=>t.replace(/@/g,'(a)');
+  if(mtPass){$('game').innerHTML=`<div class="card" style="text-align:center"><p class="big">📱 Passa o celular pra ${p[1].n}</p><p class="note">${p[0].n}, não olha!</p></div><button class="btn main-btn" onclick="mtPass=false;rMT()">Sou ${p[1].n}, bora</button>`;return}
+  if(mtStep<2){const k=L[mtIdx];
+    $('game').innerHTML=`<div class="turn">🤫 ${p[mtStep].n} vota em segredo (${mtIdx+1}/${L.length})</div><div class="card" style="text-align:center"><p class="big">${g(k[1])}</p></div>
+     <div class="row"><button class="btn" onclick="mtVote(0)">❌ Não</button><button class="btn" onclick="mtVote(1)">🤔 Talvez</button><button class="btn main-btn" onclick="mtVote(2)">🔥 Quero</button></div>`;return}
+  const both=L.filter((k,i)=>mtAns[0][i]===2&&mtAns[1][i]===2),maybe=L.filter((k,i)=>mtAns[0][i]&&mtAns[1][i]&&!(mtAns[0][i]===2&&mtAns[1][i]===2));
+  mtBoth=both.map(k=>g(k[1]));
+  $('game').innerHTML=`<div class="card"><span class="tag">🔥 OS DOIS QUEREM (${both.length})</span>${both.map(k=>`<div class="mrow">${g(k[1])}</div>`).join('')||'<p class="note">Nenhum… ainda 😏</p>'}</div>
+   <div class="card"><span class="tag">🤔 TALVEZ ROLE (${maybe.length})</span>${maybe.map(k=>`<div class="mrow">${g(k[1])}</div>`).join('')||'<p class="note">—</p>'}</div>
+   <p class="note">Os “não” de cada um ficam em segredo.</p><div id="mtp"></div>
+   ${both.length?`<button class="btn main-btn" onclick="mtPick()">🎯 Sortear um pra fazer hoje</button>`:''}
+   <button class="btn" onclick="rMT(1)">🔁 Votar de novo</button>`;
+}
+
+// ===== Bomba Safada (batata quente com tempo secreto) =====
+const QUICK=['beija o pescoço','aperta a bunda','morde a orelha','tira uma peça','lambe os lábios','passa a mão entre as pernas','chupa o mamilo','dá um tapa na bunda','beija a barriga','sussurra uma sacanagem','rebola no colo','chupa o dedo'];
+let bombT=null,bombHold=0;
+function bombPass(){bombHold=1-bombHold;rBO('run')}
+function rBO(st){
+  const p=players();
+  if(!st){clearTimeout(bombT);$('game').innerHTML=`<div class="card"><p class="big">Regras</p><p class="note" style="color:var(--txt)">A bomba tem um tempo secreto (15 a 60 s). Quem estiver com o celular faz a ação rápida no outro e aperta <b>Passar</b>. Quem estiver segurando quando explodir paga o desafio pesado.</p></div><button class="btn main-btn" onclick="bombHold=Math.floor(Math.random()*2);bombT=setTimeout(()=>rBO('boom'),(15+Math.random()*45)*1000);unlockAudio();rBO('run')">💣 Acender o pavio</button>`;return}
+  if(st==='run'){const a=p[bombHold],b=p[1-bombHold];
+    $('game').innerHTML=`<div class="bomb">💣</div><div class="turn">${a.n} segura!</div><div class="card" style="text-align:center"><p class="big">${a.n} ${rnd(QUICK)} de ${b.n}</p></div><button class="btn main-btn" style="font-size:1.4rem;padding:22px" onclick="bombPass()">🔄 PASSAR</button>`;return}
+  // boom
+  const a=p[bombHold],b=p[1-bombHold];alarm();navigator.vibrate&&navigator.vibrate([600,100,600]);
+  const lv=Math.max(S.lvl,2),L=DARES.filter(c=>c[0]===lv||c[0]===S.lvl).filter(c=>(!c[3]||c[3]===a.g)&&(!c[4]||c[4]===b.g)&&(!c[5]||S.lvl>1));
+  const c=wrnd(L,dw(b));
+  $('game').innerHTML=`<div class="bomb" style="animation:none">💥</div><div class="card"><span class="tag">BOOM! ${a.n} PAGA</span><p class="big">${fmt(c[1],a,b)}</p>${dareImg(c[1])}${timerHTML(c[2])}</div><button class="btn main-btn" onclick="rBO()">💣 De novo</button>`;
+}
+
+// ===== Vales Safados (inspirado em cupons/coupon books de casal) =====
+const COUPONS=[
+[1,'Massagem de 20 min, sem reclamar'],[1,'Banho juntos'],[1,'Beijo de 1 minuto onde e quando eu quiser'],[1,'Escolho a lingerie/cueca que você vai usar'],
+[2,'Striptease particular'],[2,'Uma noite inteira obedecendo'],[2,'Acordar com oral'],[2,'Nude surpresa durante o dia'],[2,'Rapidinha onde eu escolher'],
+[2,'Sexo do meu jeito, sem perguntas'],[2,'Uma fantasia minha, realizada'],[2,'Lap dance com música que eu escolher'],
+[3,'Um boquete/oral até o fim, quando eu pedir'],[3,'Anal quando eu pedir',null,'f'],[3,'Gozar onde eu quiser'],[3,'Uma sessão amarrad@'],
+[3,'Sexo em lugar público (com cuidado)'],[3,'Plug anal num jantar fora',null,'f'],[3,'Você me usa como quiser por 30 minutos'],[3,'Um “sim” para qualquer coisa da nossa lista de Match'],
+];
+function wallet(){return JSON.parse(localStorage.getItem('jq_vales')||'[]')}
+function saveWallet(w){localStorage.setItem('jq_vales',JSON.stringify(w))}
+let lastCoupon=null;
+function rCP(act,arg){
+  const [a,b]=actor();let w=wallet();
+  if(act==='draw'){const L=COUPONS.filter(c=>c[0]<=S.lvl&&(!c[3]||c[3]===a.g));const c=wrnd(L,x=>x[3]==='f'?ANAL_W:1);
+    lastCoupon={de:b.n,para:a.n,t:c[1].replace(/@/g,b.g==='m'?'o':'a')}}
+  if(act==='save'&&lastCoupon){w.push(lastCoupon);saveWallet(w);lastCoupon=null;turn++}
+  if(act==='use'){w.splice(arg,1);saveWallet(w)}
+  const [a2,b2]=actor();
+  $('game').innerHTML=(lastCoupon?`<div class="coupon shake">🎟️ ${lastCoupon.de} deve a ${lastCoupon.para}<b>VALE: ${lastCoupon.t}</b><small class="note">Válido por 7 dias. Intransferível 😏</small></div>
+    <div class="row"><button class="btn" onclick="lastCoupon=null;rCP()">🗑️ Descartar</button><button class="btn main-btn" onclick="rCP('save')">💾 Guardar</button></div>`
+   :`${turnLine(a2)}<button class="btn main-btn" onclick="rCP('draw')">🎟️ ${a2.n} sorteia um vale (${b2.n} paga)</button>`)+
+   `<h2>Carteira de vales (${w.length})</h2>${w.map((v,k)=>`<div class="mrow"><span><b style="color:var(--gold)">${v.para}</b> cobra de ${v.de}:<br>${v.t}</span><button onclick="rCP('use',${k})">✅ Usar</button></div>`).join('')||'<p class="note">Vazia. Os vales ficam salvos neste celular.</p>'}`;
+}
+// Eu nunca
+function rEN(){
+  const p=players();const c=draw('n',NEVER.filter(x=>inLvl(x[0])));
+  $('game').innerHTML=`<div class="card"><span class="tag">EU NUNCA · ${lvlName[c[0]]}</span><p class="big">${c[1].replace(/@|\(a\)/g,'(a)')}</p>
+   <p class="note">Quem já fez, bebe. E tem que contar a história 😏</p></div>
+   <div class="row"><button class="btn" onclick="drinks[0]++;renderScore()">🍷 ${p[0].n} bebeu</button><button class="btn" onclick="drinks[1]++;renderScore()">🍷 ${p[1].n} bebeu</button></div>
+   <button class="btn main-btn" onclick="next()">➡️ Próxima</button>`;
+}
+// Catálogo
+function rLT(){$('game').innerHTML=POS.filter(p=>p.c.split(' ').includes(S.combo)).map(p=>posCard(p)).join('')}
+
+/* init */
+(function(){
+  document.querySelectorAll('[data-art]').forEach(e=>e.innerHTML=ART[e.dataset.art]);
+  $('n1').value=S.n1;$('n2').value=S.n2;
+  document.querySelectorAll('[data-c]').forEach(b=>b.classList.toggle('sel',b.dataset.c===S.combo));
+  document.querySelectorAll('[data-l]').forEach(b=>b.classList.toggle('sel',+b.dataset.l===S.lvl));
+})();
+</script>
+</body>
+</html>
